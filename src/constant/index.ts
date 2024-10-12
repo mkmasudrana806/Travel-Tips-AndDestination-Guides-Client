@@ -106,31 +106,31 @@ export const destinations = [
     id: 1,
     name: "Paris",
     image:
-      "https://www.agoda.com/wp-content/uploads/2020/01/Bali-itinerary-Tegenungan-waterfal.jpg",
+      "https://www.travelescape.in/wp-content/uploads/2020/10/eiffel-tower-Paris.jpg",
   },
   {
     id: 2,
     name: "Tokyo",
     image:
-      "https://www.agoda.com/wp-content/uploads/2020/01/Bali-itinerary-Tegenungan-waterfal.jpg",
+      "https://media.cntraveler.com/photos/60341fbad7bd3b27823c9db2/16:9/w_1600,c_limit/Tokyo-2021-GettyImages-1208124099.jpg",
   },
   {
     id: 3,
     name: "New York",
     image:
-      "https://www.agoda.com/wp-content/uploads/2020/01/Bali-itinerary-Tegenungan-waterfal.jpg",
+      "https://res.cloudinary.com/lastminute-contenthub/s--snAJ54ul--/c_crop,h_3609,w_5956,x_0,y_362/c_limit,h_999999,w_1920/f_auto/q_auto:eco/v1/DAM/Photos/Destinations/Americas/USA/New%20York/eyeem-100000360-194812575",
   },
   {
     id: 4,
     name: "Sydney",
     image:
-      "https://www.agoda.com/wp-content/uploads/2020/01/Bali-itinerary-Tegenungan-waterfal.jpg",
+      "https://content.r9cdn.net/rimg/dimg/43/4b/72c43e11-city-2258-16e22333599.jpg?width=1366&height=768&xhint=1308&yhint=1560&crop=true",
   },
   {
     id: 5,
     name: "Rome",
     image:
-      "https://www.agoda.com/wp-content/uploads/2020/01/Bali-itinerary-Tegenungan-waterfal.jpg",
+      "https://content.r9cdn.net/rimg/dimg/7f/2e/d82165ea-city-25465-16e7e859ccc.jpg?width=1366&height=768&xhint=1183&yhint=1022&crop=true",
   },
 ];
 

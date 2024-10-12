@@ -20,7 +20,7 @@ export default function FeaturedDestinationsCarousel() {
   };
 
   return (
-    <div className="relative w-full h-[400px] overflow-hidden rounded-lg">
+    <div className="relative w-full h-[500px] overflow-hidden rounded-lg">
       {destinations.map((destination, index) => (
         <div
           key={destination.id}

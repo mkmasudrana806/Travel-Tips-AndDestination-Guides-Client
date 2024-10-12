@@ -11,14 +11,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Camera, Video, Smile } from "lucide-react";
-// import CreatePost from "@/components/create-post";
 
 export default function PostInputHome() {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div className="bg-white shadow rounded-lg p-4 my-6">
       <div className="flex items-center space-x-4">
@@ -36,7 +32,7 @@ export default function PostInputHome() {
               <Input
                 readOnly
                 className="cursor-pointer   bg-gray-100 hover:bg-gray-200  "
-                placeholder="What's on your mind?"
+                placeholder="What's on your mind, Masud?"
                 width={"100%"}
               />
             </div>
