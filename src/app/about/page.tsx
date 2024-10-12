@@ -9,10 +9,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Globe, Users, Compass, Award } from "lucide-react";
 import { teamMembers } from "@/constant";
+import Link from "next/link";
 
 export default function AboutPage() {
   return (
     <div className="container mx-auto py-12">
+      {/* about travel tips and guide  */}
       <section className="text-center mb-16">
         <h1 className="text-4xl font-bold mb-4">
           About Travel Tips & Destination Guides
@@ -23,6 +25,7 @@ export default function AboutPage() {
         </p>
       </section>
 
+      {/* our mission  */}
       <section className="mb-16">
         <h2 className="text-3xl font-bold mb-8 text-center">Our Mission</h2>
         <div className="grid md:grid-cols-2 gap-8">
@@ -135,13 +138,16 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* join our community  */}
       <section className="mt-16 text-center">
         <h2 className="text-3xl font-bold mb-4">Join Our Community</h2>
         <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
           Become a part of our growing family of travelers. Share your stories,
           get inspired, and plan your next adventure with us.
         </p>
-        <Button size="lg">Sign Up Now</Button>
+        <Link href={"/register"}>
+          <Button size="lg">Sign Up Now</Button>
+        </Link>
       </section>
     </div>
   );

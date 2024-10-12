@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { MapPin, ThumbsUp, MessageCircle, Users } from "lucide-react";
+import PremiumContentPage from "./PremiumPosts";
 
 export default function HomePage() {
   return (
@@ -52,7 +53,7 @@ export default function HomePage() {
               </CardHeader>
               <CardContent>
                 <Image
-                  src="/placeholder.svg?height=200&width=400"
+                  src="https://www.agoda.com/wp-content/uploads/2020/01/Bali-itinerary-Tegenungan-waterfal.jpg"
                   alt="Bali scenery"
                   width={400}
                   height={200}
@@ -76,6 +77,14 @@ export default function HomePage() {
             </Card>
           ))}
         </div>
+      </section>
+
+      {/* Featured Posts Section */}
+      <section className="container">
+        <h2 className="text-3xl font-bold mb-8">
+          Premium Travel Tips & Guides
+        </h2>
+        <PremiumContentPage />
       </section>
 
       {/* About Us Section */}

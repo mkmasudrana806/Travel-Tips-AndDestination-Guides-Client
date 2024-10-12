@@ -64,6 +64,7 @@ export default function RegisterPage() {
         router.push("/login");
       }, 2000);
     } catch (error) {
+      console.log(error);
       setErrors({ form: "Registration failed. Please try again." });
     } finally {
       setIsLoading(false);
