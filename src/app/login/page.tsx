@@ -17,7 +17,11 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+// ------------- login page  --------------------
 export default function LoginPage() {
+  // ----------- redux
+
+  // ---------- react
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -46,6 +50,7 @@ export default function LoginPage() {
     return Object.keys(newErrors).length === 0;
   };
 
+  // handle submit form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;

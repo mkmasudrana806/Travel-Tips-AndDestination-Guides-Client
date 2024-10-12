@@ -18,17 +18,22 @@ import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  // ----------- react ------------------------------
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    age: "",
+    gender: "",
+    contact: "",
+    address: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const router = useRouter();
 
+  // -------------- handle input change ----------------
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -38,20 +43,60 @@ export default function RegisterPage() {
     }
   };
 
+  // ---------------- validating form data -------------
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.username.trim()) newErrors.username = "Username is required";
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(formData.email))
+
+    // Name validation
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Email is invalid";
-    if (!formData.password) newErrors.password = "Password is required";
-    if (formData.password !== formData.confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    // Password validation
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters long";
+    }
+
+    // Age validation
+    if (!formData.age.trim()) {
+      newErrors.age = "Age is required";
+    } else if (!/^\d+$/.test(formData.age)) {
+      newErrors.age = "Age must be a number";
+    }
+
+    // Gender validation
+    if (!formData.gender.trim()) {
+      newErrors.gender = "Gender is required";
+    }
+
+    // Contact validation
+    if (!formData.contact.trim()) {
+      newErrors.contact = "Contact number is required";
+    } else if (!/^\d{10}$/.test(formData.contact)) {
+      newErrors.contact = "Contact number must be a valid 10-digit number";
+    }
+
+    // Address validation
+    if (!formData.address.trim()) {
+      newErrors.address = "Address is required";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  // -------------- handle register user -------------
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("register data: ", formData);
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -82,21 +127,24 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Name  */}
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="name">Name</Label>
               <Input
-                id="username"
-                name="username"
+                id="name"
+                name="name"
                 type="text"
                 placeholder="johndoe"
-                value={formData.username}
+                value={formData.name}
                 onChange={handleChange}
-                aria-invalid={!!errors.username}
+                aria-invalid={!!errors.name}
               />
-              {errors.username && (
-                <p className="text-sm text-destructive">{errors.username}</p>
+              {errors.name && (
+                <p className="text-sm text-destructive">{errors.name}</p>
               )}
             </div>
+
+            {/* email  */}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -112,6 +160,7 @@ export default function RegisterPage() {
                 <p className="text-sm text-destructive">{errors.email}</p>
               )}
             </div>
+            {/* password  */}
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
@@ -126,22 +175,71 @@ export default function RegisterPage() {
                 <p className="text-sm text-destructive">{errors.password}</p>
               )}
             </div>
+
+            {/* age  */}
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Label htmlFor="age">Age</Label>
               <Input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                value={formData.confirmPassword}
+                id="age"
+                name="age"
+                type="number"
+                value={formData.age}
                 onChange={handleChange}
-                aria-invalid={!!errors.confirmPassword}
+                aria-invalid={!!errors.age}
               />
-              {errors.confirmPassword && (
-                <p className="text-sm text-destructive">
-                  {errors.confirmPassword}
-                </p>
+              {errors.age && (
+                <p className="text-sm text-destructive">{errors.age}</p>
               )}
             </div>
+
+            {/* gender  */}
+            <div className="space-y-2">
+              <Label htmlFor="age">Age</Label>
+              <Input
+                id="age"
+                name="age"
+                type="number"
+                value={formData.age}
+                onChange={handleChange}
+                aria-invalid={!!errors.age}
+              />
+              {errors.age && (
+                <p className="text-sm text-destructive">{errors.age}</p>
+              )}
+            </div>
+
+            {/* contact  */}
+            <div className="space-y-2">
+              <Label htmlFor="contact">Contact</Label>
+              <Input
+                id="contact"
+                name="contact"
+                type="number"
+                value={formData.contact}
+                onChange={handleChange}
+                aria-invalid={!!errors.contact}
+              />
+              {errors.contact && (
+                <p className="text-sm text-destructive">{errors.contact}</p>
+              )}
+            </div>
+
+            {/* address  */}
+            <div className="space-y-2">
+              <Label htmlFor="address">Address</Label>
+              <Input
+                id="address"
+                name="address"
+                type="text"
+                value={formData.address}
+                onChange={handleChange}
+                aria-invalid={!!errors.address}
+              />
+              {errors.address && (
+                <p className="text-sm text-destructive">{errors.address}</p>
+              )}
+            </div>
+
             {errors.form && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />

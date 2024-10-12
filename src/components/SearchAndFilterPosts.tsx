@@ -60,7 +60,7 @@ export default function SearchAndFilterPosts() {
   }, [searchTerm, selectedCategory, sortBy]);
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-2">
       <Card>
         <CardHeader>
           <CardTitle>Search and Filter Posts</CardTitle>
