@@ -58,7 +58,15 @@ const customBaseQueryWithRefreshToken: BaseQueryFn<
 const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: customBaseQueryWithRefreshToken,
-  tagTypes: ["posts", "post", "comments", "comment", "users", "user"],
+  tagTypes: [
+    "posts",
+    "post",
+    "comments",
+    "comments-post",
+    "comment",
+    "users",
+    "user",
+  ],
   endpoints: () => ({}),
 });
 

@@ -16,17 +16,27 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useRegisterUserMutation } from "@/redux/features/auth/authApi";
 
 export default function RegisterPage() {
+  // ---------- redux
+  const [registerUser] = useRegisterUserMutation();
   // ----------- react ------------------------------
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    age: "",
-    gender: "",
-    contact: "",
-    address: "",
+    name: "Masud",
+    email: "masuda@gmail.com",
+    password: "134234234",
+    age: "23",
+    gender: "male",
+    contact: "324234234",
+    address: "adsdfsdf",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -81,8 +91,6 @@ export default function RegisterPage() {
     // Contact validation
     if (!formData.contact.trim()) {
       newErrors.contact = "Contact number is required";
-    } else if (!/^\d{10}$/.test(formData.contact)) {
-      newErrors.contact = "Contact number must be a valid 10-digit number";
     }
 
     // Address validation
@@ -96,21 +104,28 @@ export default function RegisterPage() {
 
   // -------------- handle register user -------------
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("register data: ", formData);
     e.preventDefault();
     if (!validateForm()) return;
 
     setIsLoading(true);
+
     try {
-      // Simulating API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setSuccessMessage("Registration successful! Redirecting to login...");
-      setTimeout(() => {
-        router.push("/login");
-      }, 2000);
-    } catch (error) {
+      const result: any = await registerUser({
+        ...formData,
+        age: Number(formData.age),
+      });
+
+      if (result?.data?.success) {
+        setSuccessMessage("Registration successful! Redirecting to login...");
+        setTimeout(() => {
+          router.push("/login");
+        }, 1000);
+      } else {
+        throw new Error(result?.error?.data?.message);
+      }
+    } catch (error: any) {
       console.log(error);
-      setErrors({ form: "Registration failed. Please try again." });
+      setErrors({ form: error?.message });
     } finally {
       setIsLoading(false);
     }
@@ -182,6 +197,7 @@ export default function RegisterPage() {
               <Input
                 id="age"
                 name="age"
+                min={0}
                 type="number"
                 value={formData.age}
                 onChange={handleChange}
@@ -194,17 +210,23 @@ export default function RegisterPage() {
 
             {/* gender  */}
             <div className="space-y-2">
-              <Label htmlFor="age">Age</Label>
-              <Input
-                id="age"
-                name="age"
-                type="number"
-                value={formData.age}
-                onChange={handleChange}
-                aria-invalid={!!errors.age}
-              />
-              {errors.age && (
-                <p className="text-sm text-destructive">{errors.age}</p>
+              <Label htmlFor="gender">Gender</Label>
+              <Select
+                value={formData.gender}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, gender: value })
+                }
+              >
+                <SelectTrigger id="gender" aria-invalid={!!errors.gender}>
+                  <SelectValue placeholder="Select your gender" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.gender && (
+                <p className="text-sm text-destructive">{errors.gender}</p>
               )}
             </div>
 

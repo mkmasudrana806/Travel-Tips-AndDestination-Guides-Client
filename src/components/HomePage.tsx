@@ -1,18 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { MapPin, ThumbsUp, MessageCircle, Users } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MapPin, ThumbsUp, Users } from "lucide-react";
 import PremiumContentPage from "./PremiumPosts";
+import TopTreavelPosts from "./posts/TopTreavelPosts";
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <div className="space-y-16">
       {/* Hero Section */}
@@ -44,39 +38,7 @@ export default function HomePage() {
         <h2 className="text-3xl font-bold mb-8">
           Featured Travel Tips & Guides
         </h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3].map((post) => (
-            <Card key={post}>
-              <CardHeader>
-                <CardTitle>Amazing Trip to Bali</CardTitle>
-                <CardDescription>By John Doe</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Image
-                  src="https://www.agoda.com/wp-content/uploads/2020/01/Bali-itinerary-Tegenungan-waterfal.jpg"
-                  alt="Bali scenery"
-                  width={400}
-                  height={200}
-                  className="rounded-md mb-4"
-                />
-                <p>
-                  Discover the hidden gems of Bali, from pristine beaches to
-                  lush jungles...
-                </p>
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <div className="flex items-center space-x-2">
-                  <ThumbsUp className="w-4 h-4" />
-                  <span>245</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <MessageCircle className="w-4 h-4" />
-                  <span>18</span>
-                </div>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
+        <TopTreavelPosts />
       </section>
 
       {/* Featured Posts Section */}

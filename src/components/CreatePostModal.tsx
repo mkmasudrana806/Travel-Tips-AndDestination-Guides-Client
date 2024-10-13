@@ -27,29 +27,36 @@ import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import { useRouter } from "next/navigation";
+import { useCreatePostMutation } from "@/redux/features/posts/postApi";
 
 const categories = [
-  { value: "adventure", label: "Adventure" },
+  { value: "Adventure", label: "Adventure" },
   { value: "culture", label: "Culture" },
   { value: "food", label: "Food & Cuisine" },
   { value: "nature", label: "Nature & Outdoors" },
   { value: "city", label: "City Exploration" },
 ];
 
+// ---------------- create post modal component ----------------
 export default function CreatePostModal() {
+  // ------------- redux ---------------
+  const [createPost] = useCreatePostMutation();
+
+  // -------------- react ------------
   const [formData, setFormData] = useState({
     title: "",
     category: "",
     content: "",
-    isPremium: false,
+    premium: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-  const [isPremium, setIsPremium] = useState(false);
+  const [file, setFile] = useState<File | any>(null);
 
   const router = useRouter();
 
+  // ----------- handle input fields -----------------------
   const handleChange = (name: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
@@ -57,6 +64,17 @@ export default function CreatePostModal() {
     }
   };
 
+  // ------------ handle file upload -----------------------
+  const handleFileChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFile(file);
+    } else {
+      console.log("no file section");
+    }
+  };
+
+  // ---------- validate form data ----------
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.title.trim()) newErrors.title = "Title is required";
@@ -66,23 +84,29 @@ export default function CreatePostModal() {
     return Object.keys(newErrors).length === 0;
   };
 
+  // ------------ handle create a post ----------------
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
-
     setIsLoading(true);
+    const data = new FormData();
     try {
-      // Simulating API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setSuccessMessage(
-        "Post created successfully! Redirecting to your dashboard..."
-      );
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 2000);
-    } catch (error) {
-      console.log(error);
-      setErrors({ form: "Failed to create post. Please try again." });
+      data.append("file", file);
+      data.append("data", JSON.stringify(formData));
+
+      // hit api to create a post
+      const result: any = await createPost(data);
+
+      if (result?.data?.success) {
+        setSuccessMessage("Post created successfully!");
+        setTimeout(() => {
+          router.push("/");
+        }, 1000);
+      } else {
+        throw new Error(result?.error?.data?.message);
+      }
+    } catch (error: any) {
+      setErrors({ form: error?.message });
     } finally {
       setIsLoading(false);
     }
@@ -98,9 +122,13 @@ export default function CreatePostModal() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6"
+            encType="multipart/form-data"
+          >
+            {/* travel title  */}
             <div className="space-y-2">
-              {/* travel title  */}
               <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
@@ -137,6 +165,21 @@ export default function CreatePostModal() {
               )}
             </div>
 
+            {/* post banner */}
+            <div className="space-y-2">
+              <Label htmlFor="file">Upload File</Label>
+              <Input
+                id="file"
+                type="file"
+                accept="image/*" // Accept only image files
+                onChange={handleFileChange}
+                aria-invalid={!!errors.file}
+              />
+              {errors.file && (
+                <p className="text-sm text-destructive">{errors.file}</p>
+              )}
+            </div>
+
             {/* quil editor  */}
             <div className="space-y-4">
               <Label htmlFor="content">Content</Label>
@@ -165,8 +208,13 @@ export default function CreatePostModal() {
               <div className="flex items-center space-x-2 mt-[40px]">
                 <Switch
                   id="premium"
-                  checked={isPremium}
-                  onCheckedChange={setIsPremium}
+                  checked={formData.premium}
+                  onCheckedChange={(checked) =>
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      premium: checked,
+                    }))
+                  }
                 />
                 <Label htmlFor="premium">Premium Content</Label>
               </div>

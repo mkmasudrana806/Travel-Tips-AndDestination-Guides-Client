@@ -82,6 +82,7 @@ export default function SearchAndFilterPosts() {
             <div>
               <Label htmlFor="category">Category</Label>
               <Select
+              
                 value={selectedCategory}
                 onValueChange={setSelectedCategory}
               >

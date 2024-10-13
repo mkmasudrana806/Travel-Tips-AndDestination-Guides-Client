@@ -1,25 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Bell, Menu, Search, X } from "lucide-react";
+import { useAppSelector } from "@/redux/hooks";
+import UserProfileMenu from "./UserProfileMenu";
 
 const Navbar = () => {
+  // redux
+  const isLoggedIn = useAppSelector((state) => state.auth.token);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Replace with actual auth state
   const pathname = usePathname();
+  const [hasMounted, setHasMounted] = useState(false);
+
+  // Ensure that the component has mounted on the client side
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) {
+    return null;
+  }
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -74,6 +84,8 @@ const Navbar = () => {
                   <Search className="h-5 w-5" />
                 </Button>
               </form>
+
+              {/* open menu when user is logged in  */}
               {isLoggedIn ? (
                 <>
                   <Button variant="ghost" size="icon" className="ml-2" asChild>
@@ -81,33 +93,20 @@ const Navbar = () => {
                       <Bell className="h-5 w-5" />
                     </Link>
                   </Button>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="ml-2">
-                        <Avatar>
-                          <AvatarImage
-                            src="/placeholder.svg?height=32&width=32"
-                            alt="User"
-                          />
-                          <AvatarFallback>U</AvatarFallback>
-                        </Avatar>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                      <DropdownMenuItem asChild>
-                        <Link href="/user-dashboard">Dashboard</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href="/user-profile">Profile</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href="/user-settings">Settings</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>Log out</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Avatar>
+                        <AvatarImage
+                          src="https://d22e6o9mp4t2lx.cloudfront.net/cms/pfp3_d7855f9562.webp"
+                          alt="@shadcn"
+                        />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-64 p-4">
+                      <UserProfileMenu />
+                    </PopoverContent>
+                  </Popover>
                 </>
               ) : (
                 <div className="flex items-center ml-2 space-x-2">
@@ -133,6 +132,7 @@ const Navbar = () => {
         </div>
       </div>
 
+      {/* open menu in small device  */}
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -152,57 +152,7 @@ const Navbar = () => {
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">
             {isLoggedIn ? (
-              <>
-                <div className="flex items-center px-5">
-                  <div className="flex-shrink-0">
-                    <Avatar>
-                      <AvatarImage
-                        src="/placeholder.svg?height=40&width=40"
-                        alt="User"
-                      />
-                      <AvatarFallback>U</AvatarFallback>
-                    </Avatar>
-                  </div>
-                  <div className="ml-3">
-                    <div className="text-base font-medium">User Name</div>
-                    <div className="text-sm font-medium text-muted-foreground">
-                      user@example.com
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-3 px-2 space-y-1">
-                  <Link
-                    href="/user-dashboard"
-                    className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    href="/user-profile"
-                    className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-                  >
-                    Profile
-                  </Link>
-                  <Link
-                    href="/user-settings"
-                    className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-                  >
-                    Settings
-                  </Link>
-                  <Link
-                    href="/notifications"
-                    className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-                  >
-                    Notifications
-                  </Link>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-                  >
-                    Log out
-                  </Button>
-                </div>
-              </>
+              <UserProfileMenu />
             ) : (
               <div className="mt-3 px-2 space-y-1">
                 <Link

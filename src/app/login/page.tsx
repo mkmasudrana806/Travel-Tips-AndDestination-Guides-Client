@@ -16,21 +16,29 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import verifyToken from "@/utils/verifyToken";
+import { TUser } from "@/types/userType";
+import { useAppDispatch } from "@/redux/hooks";
+import { setUser } from "@/redux/features/auth/authSlice";
 
 // ------------- login page  --------------------
 export default function LoginPage() {
   // ----------- redux
+  const dispatch = useAppDispatch();
+  const [login] = useLoginMutation();
 
   // ---------- react
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: "masud@gmail.com",
+    password: "masud",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const router = useRouter();
 
+  // ----------- handle change input ----------------
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -40,6 +48,7 @@ export default function LoginPage() {
     }
   };
 
+  // ----------------- validation form
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.email.trim()) newErrors.email = "Email is required";
@@ -54,19 +63,24 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
-
     setIsLoading(true);
     try {
-      // Simulating API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setSuccessMessage("Login successful! Redirecting to dashboard...");
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 2000);
-    } catch (error) {
-      console.log(error);
+      const result: any = await login(formData);
+      if (result?.data?.success) {
+        const user = verifyToken(result?.data?.data?.accessToken) as TUser;
+        dispatch(setUser({ user, token: result?.data?.data?.accessToken }));
+        setSuccessMessage("Login successful! Redirecting to previous page...");
+        setTimeout(() => {
+          router.push("/");
+        }, 1000);
+      } else {
+        console.log("throw error");
+        throw new Error(result?.error?.data?.message);
+      }
+    } catch (error: any) {
+      console.log("eror: ", error);
       setErrors({
-        form: "Login failed. Please check your credentials and try again.",
+        form: error?.message,
       });
     } finally {
       setIsLoading(false);
