@@ -8,7 +8,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Camera, Video, Smile } from "lucide-react";
-import CreatePostModal from "./CreatePostModal";
+import CreatePostModal from "./posts/CreatePostModal";
 
 export default function PostInputHome() {
   return (

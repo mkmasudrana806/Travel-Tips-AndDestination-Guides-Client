@@ -50,7 +50,7 @@ const postApi = baseApi.injectEndpoints({
     // ---------- load single post
     getPostById: builder.query({
       query: (id) => ({
-        url: `/post/${id}`,
+        url: `/posts/${id}`,
       }),
       providesTags: (_result, _error, arg) => [{ type: "post", id: arg.id }],
     }),
@@ -84,7 +84,10 @@ const postApi = baseApi.injectEndpoints({
           method: "PATCH",
         };
       },
-      invalidatesTags: ["posts"],
+      invalidatesTags: (_result, _error, postId) => [
+        { type: "posts" },
+        { type: "post", id: postId },
+      ],
     }),
 
     // ---------- downvote a post
@@ -95,7 +98,10 @@ const postApi = baseApi.injectEndpoints({
           method: "PATCH",
         };
       },
-      invalidatesTags: ["posts"],
+      invalidatesTags: (_result, _error, postId) => [
+        { type: "posts" },
+        { type: "post", id: postId },
+      ],
     }),
   }),
 });

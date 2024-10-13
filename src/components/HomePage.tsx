@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, ThumbsUp, Users } from "lucide-react";
-import PremiumContentPage from "./PremiumPosts";
+import PremiumContentPage from "./posts/PremiumPosts";
 import TopTreavelPosts from "./posts/TopTreavelPosts";
 
 export default async function HomePage() {

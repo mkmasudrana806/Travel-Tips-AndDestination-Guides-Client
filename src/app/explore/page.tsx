@@ -1,7 +1,7 @@
 import FeaturedDestinationsCarousel from "@/components/FeaturedDestinations";
 import TravelMap from "@/components/TravelMaps";
 import TravelTrends from "@/components/TravelTrends";
-import PremiumPosts from "@/components/PremiumPosts";
+import PremiumPosts from "@/components/posts/PremiumPosts";
 
 export default function ExplorePage() {
   return (

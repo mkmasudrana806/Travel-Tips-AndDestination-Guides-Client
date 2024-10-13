@@ -1,10 +1,10 @@
-import PostDetailsPage from "@/components/PostDetailsPage";
+import PostDetailsPage from "@/components/posts/PostDetailsPage";
 import React from "react";
 
-const page = () => {
+const page = ({ params }: { params: { postId: string } }) => {
   return (
     <div>
-      <PostDetailsPage />
+      <PostDetailsPage id={params?.postId} />
     </div>
   );
 };

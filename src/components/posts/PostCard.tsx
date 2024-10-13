@@ -62,6 +62,25 @@ const PostCard: React.FC<Props> = ({ post }) => {
     }
   };
 
+  // ----------- handle body content
+  const firstTagRegex = /<(\w+)[^>]*>(.*?)<\/\1>/i;
+  // Function to get the first tag's content
+  const getFirstTagContent = (htmlContent: string) => {
+    const match = htmlContent.match(firstTagRegex);
+    if (match) {
+      const firstTagName = match[1]; // Get the tag name
+      // Check if the first tag is an <img> tag
+      if (firstTagName === "img") {
+        return ""; // Return empty for <img> tags
+      }
+      return match[0]; // Return the first tag's content with the tag
+    }
+    return ""; // Return empty if no tags are found
+  };
+
+  // Get the content of the first tag
+  const firstTagContent = getFirstTagContent(post?.content);
+
   return (
     <Card>
       <CardHeader>
@@ -81,10 +100,11 @@ const PostCard: React.FC<Props> = ({ post }) => {
             height={200}
             className="rounded-md mb-4"
           />
-          <p>
-            Discover the hidden gems of Bali, from pristine beaches to lush
-            jungles...
-          </p>
+          {firstTagContent === "" ? (
+            <p>No details</p>
+          ) : (
+            <div dangerouslySetInnerHTML={{ __html: firstTagContent }} />
+          )}
         </CardContent>
       </Link>
       <CardFooter className="flex justify-between">

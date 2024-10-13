@@ -1,6 +1,7 @@
-export type TPost = {
+export type TComment = {
   _id: string;
-  author: {
+  postId: string;
+  userId: {
     _id: string;
     name: string;
     email: string;
@@ -8,14 +9,7 @@ export type TPost = {
     isVerified: boolean;
     premiumAccess: boolean;
   };
-  title: string;
-  content: string;
-  category: string;
-  image: string;
-  premium: boolean;
-  upvotes: string[];
-  downvotes: string[];
-  isDeleted: boolean;
+  comment: string;
   createdAt: string;
   updatedAt: string;
 };
