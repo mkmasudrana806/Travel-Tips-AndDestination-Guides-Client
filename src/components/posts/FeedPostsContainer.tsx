@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -24,23 +24,25 @@ import { TInputChangeEvent } from "@/types/reactTypes";
 import useDebounce from "@/utils/useDebounce";
 import DataNotFound from "../message/DataNotFound";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { RootState } from "@/redux/store";
 import { searchPosts, setSortBy } from "@/redux/features/posts/filterSlice";
 import { categories } from "@/constant";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { TPost } from "@/types/postType";
 
 // ----------- feed posts container
 export default function FeedPostsContainer() {
   // ------------ searching with debounce
-  // redux
   const dispatch = useAppDispatch();
   const [selectedCategory, setSelectedCategory] = useState("");
-  const { searchTerm, sortBy, limit, page } = useAppSelector(
-    (state: RootState) => state.filters
+  const { searchTerm, sortBy, limit } = useAppSelector(
+    (state) => state.filters
   );
+  const [page, setPage] = useState(1); // Track current page
+  const [allPosts, setAllPosts] = useState<TPost[]>([]); // Maintain all fetched posts
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const {
-    data: posts = [],
+    data: posts = { data: [] },
     isLoading,
     isError,
   } = useLoadAllPostsQuery({
@@ -51,29 +53,52 @@ export default function FeedPostsContainer() {
     category: selectedCategory,
   });
 
+  // Update allPosts when new posts are fetched
+  useEffect(() => {
+    if (posts?.data?.length > 0) {
+      setAllPosts((prevPosts) => [...prevPosts, ...posts.data]);
+    }
+  }, [posts.data]);
+
   // -------- handle search posts
   const handleSearchPosts = (event: TInputChangeEvent) => {
+    setPage(1); // Reset page when searching
+    setAllPosts([]); // Clear allPosts when searching
     dispatch(searchPosts(event.target.value));
+  };
+
+  // ------------- handle selected category
+  const handleSelectedCategory = (value: string) => {
+    setSelectedCategory(value);
+    setPage(1); // Reset page when sorting
+    setAllPosts([]); // Clear allPosts when sorting
   };
 
   // ------------- handle sort posts
   const handleSortPosts = (value: string) => {
+    setPage(1); // Reset page when sorting
+    setAllPosts([]); // Clear allPosts when sorting
     dispatch(setSortBy(value));
+  };
+
+  // has more
+  const hasMore = posts?.data?.length > 0;
+
+  // Infinite Scroll fetch more data function
+  const fetchMoreData = () => {
+    setPage((prevPage) => prevPage + 1);
   };
 
   // decide what to render
   let content = null;
-  // component to render
   if (isLoading) {
     content = <Loading />;
-  } else if (!isLoading && isError) {
+  } else if (isError) {
     content = <ErrorComponent />;
-  } else if (!isLoading && !isError && posts?.data?.length === 0) {
+  } else if (allPosts.length === 0) {
     content = <DataNotFound />;
-  } else if (!isLoading && !isError && posts?.data?.length > 0) {
-    content = posts?.data?.map((post: any) => (
-      <PostCard key={post?._id} post={post} />
-    ));
+  } else {
+    content = allPosts.map((post) => <PostCard key={post._id} post={post} />);
   }
 
   return (
@@ -103,7 +128,7 @@ export default function FeedPostsContainer() {
               <Label htmlFor="category">Category</Label>
               <Select
                 value={selectedCategory}
-                onValueChange={setSelectedCategory}
+                onValueChange={handleSelectedCategory}
               >
                 <SelectTrigger id="category" className="w-[180px]">
                   <SelectValue placeholder="Select category" />
@@ -141,12 +166,26 @@ export default function FeedPostsContainer() {
       </Card>
 
       {/* posts container */}
-      <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {content}
-      </div>
+      </div> */}
+
+      <InfiniteScroll
+        className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+        style={{ overflow: "hidden" }}
+        dataLength={posts?.data?.length} // Current number of posts
+        next={fetchMoreData} // Function to load more data
+        hasMore={hasMore} // Adjust this based on your logic for determining if more posts are available
+        loader={<Loading />}
+        endMessage={
+          <p style={{ textAlign: "center" }}>No more posts to load</p>
+        }
+      >
+        {content}
+      </InfiniteScroll>
 
       {/* show if no posts available  */}
-      {posts?.data?.length === 0 && (
+      {allPosts?.length === 0 && (
         <Card className="mt-8">
           <CardContent className="text-center py-8">
             <p className="text-lg font-semibold">No posts found</p>
