@@ -5,6 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "./ui/button";
+import { useAppSelector } from "@/redux/hooks";
+import { useRouter } from "next/navigation";
 
 type Props = {
   id: string;
@@ -12,17 +14,23 @@ type Props = {
 };
 const CommentForm: React.FC<Props> = ({ id, refetchComment }) => {
   // ------------ redux
-
+  const user = useAppSelector((state) => state.auth.token);
   const [createComment] = useCreateCommentMutation();
 
   // ----------- react
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [comment, setComment] = useState("");
+  const router = useRouter();
 
   // -------------- handle submit comment -----------------
   const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // check if the user is logged in
+    if (!user) {
+      router.push("/register");
+      return;
+    }
     const newComment = { postId: id, comment: comment };
     setError("");
     if (!comment) {
@@ -33,9 +41,9 @@ const CommentForm: React.FC<Props> = ({ id, refetchComment }) => {
       const result: any = await createComment(newComment);
       if (result?.data?.success) {
         setSuccess("Comment posted successfully!");
-        refetchComment();
-        setTimeout(() => setSuccess(""), 3000);
         setComment("");
+        refetchComment();
+        setTimeout(() => setSuccess(""), 1000);
       } else {
         setError(result?.error?.data?.message);
       }
@@ -47,6 +55,7 @@ const CommentForm: React.FC<Props> = ({ id, refetchComment }) => {
   return (
     <form onSubmit={handleCommentSubmit}>
       <Textarea
+        value={comment}
         onChange={(e) => setComment(e.target.value)}
         placeholder="Share your thoughts..."
         className="mb-4"

@@ -4,6 +4,8 @@ export type TUser = {
   userId: string;
   email: string;
   role: string;
+  premiumAccess: boolean;
+  isVerified: boolean;
   iat: number;
   exp: number;
 };

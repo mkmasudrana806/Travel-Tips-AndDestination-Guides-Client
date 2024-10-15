@@ -61,6 +61,7 @@ export default function SearchAndFilterPosts() {
 
   return (
     <div className="container mx-auto py-2">
+      {/* filter by search , cateogry and upvote and downvotes  */}
       <Card>
         <CardHeader>
           <CardTitle>Search and Filter Posts</CardTitle>
@@ -82,7 +83,6 @@ export default function SearchAndFilterPosts() {
             <div>
               <Label htmlFor="category">Category</Label>
               <Select
-              
                 value={selectedCategory}
                 onValueChange={setSelectedCategory}
               >
@@ -115,6 +115,7 @@ export default function SearchAndFilterPosts() {
         </CardContent>
       </Card>
 
+      {/* posts container  */}
       <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredPosts.map((post) => (
           <Card key={post.id}>
@@ -148,6 +149,7 @@ export default function SearchAndFilterPosts() {
         ))}
       </div>
 
+      {/* show if no posts available  */}
       {filteredPosts.length === 0 && (
         <Card className="mt-8">
           <CardContent className="text-center py-8">

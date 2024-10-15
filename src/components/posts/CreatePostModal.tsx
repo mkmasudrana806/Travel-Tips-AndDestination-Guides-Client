@@ -28,14 +28,7 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import { useRouter } from "next/navigation";
 import { useCreatePostMutation } from "@/redux/features/posts/postApi";
-
-const categories = [
-  { value: "Adventure", label: "Adventure" },
-  { value: "culture", label: "Culture" },
-  { value: "food", label: "Food & Cuisine" },
-  { value: "nature", label: "Nature & Outdoors" },
-  { value: "city", label: "City Exploration" },
-];
+import { categories } from "@/constant";
 
 // ---------------- create post modal component ----------------
 export default function CreatePostModal() {
@@ -153,7 +146,7 @@ export default function CreatePostModal() {
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category) => (
+                  {categories?.map((category) => (
                     <SelectItem key={category.value} value={category.value}>
                       {category.label}
                     </SelectItem>

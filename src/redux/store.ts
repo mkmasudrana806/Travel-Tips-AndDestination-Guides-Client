@@ -12,6 +12,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import userSlice from "./features/users/userSlice";
+import filterSlice from "./features/posts/filterSlice";
 import baseApi from "./api/baseApi";
 
 // redux persistor
@@ -28,6 +29,7 @@ const store = configureStore({
     [baseApi.reducerPath]: baseApi.reducer,
     auth: persistedReducer,
     users: userSlice,
+    filters: filterSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

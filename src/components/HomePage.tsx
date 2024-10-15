@@ -3,8 +3,8 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, ThumbsUp, Users } from "lucide-react";
-import PremiumContentPage from "./posts/PremiumPosts";
-import TopTreavelPosts from "./posts/TopTreavelPosts";
+import PremiumPostsContainer from "./posts/PremiumPostsContainer";
+import TopTreavelPostsContainer from "./posts/TopTreavelPostsContainer";
 
 export default async function HomePage() {
   return (
@@ -38,15 +38,15 @@ export default async function HomePage() {
         <h2 className="text-3xl font-bold mb-8">
           Featured Travel Tips & Guides
         </h2>
-        <TopTreavelPosts />
+        <TopTreavelPostsContainer />
       </section>
 
-      {/* Featured Posts Section */}
+      {/* premium Posts Section */}
       <section className="container">
         <h2 className="text-3xl font-bold mb-8">
           Premium Travel Tips & Guides
         </h2>
-        <PremiumContentPage />
+        <PremiumPostsContainer />
       </section>
 
       {/* About Us Section */}

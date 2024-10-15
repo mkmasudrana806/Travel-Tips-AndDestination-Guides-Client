@@ -22,7 +22,6 @@ const postApi = baseApi.injectEndpoints({
         if (searchTerm) {
           params.append("searchTerm", searchTerm);
         }
-
         // Sorting
         if (sort) {
           params.append("sort", sort);
@@ -37,7 +36,7 @@ const postApi = baseApi.injectEndpoints({
 
         // Handle dynamic properties in "others"
         Object.keys(others).forEach((key) => {
-          if (others[key]) {
+          if (others[key] && others[key] !== "default") {
             params.append(key, others[key].toString());
           }
         });

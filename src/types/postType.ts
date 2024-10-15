@@ -15,6 +15,7 @@ export type TPost = {
   premium: boolean;
   upvotes: string[];
   downvotes: string[];
+  commentCount: number;
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;

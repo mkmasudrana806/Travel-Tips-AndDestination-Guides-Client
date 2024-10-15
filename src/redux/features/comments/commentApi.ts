@@ -55,6 +55,14 @@ const commentApi = baseApi.injectEndpoints({
       providesTags: ["comments"],
     }),
 
+    // --------- comments counts for each post of posts
+    commentsCountsForAllPosts: builder.query({
+      query: (postIds) => {
+        return { url: `/comments/counts`, method: "POST", body: postIds };
+      },
+      providesTags: ["comments"],
+    }),
+
     // ---------- load single comment
     getCommentById: builder.query({
       query: (id) => ({
@@ -91,6 +99,7 @@ const commentApi = baseApi.injectEndpoints({
 export const {
   useCreateCommentMutation,
   useLoadAllCommentsQuery,
+  useCommentsCountsForAllPostsQuery,
   useLoadCommentsOfPostQuery,
   useGetCommentByIdQuery,
   useDeleteCommentMutation,

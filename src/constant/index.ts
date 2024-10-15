@@ -182,3 +182,10 @@ export const allPosts = [
       "https://www.viceroybali.com/wp-content/uploads/2024/04/three-woman-tourists-friends-travel-around-khao-sok-national-park-vacation-thailand-sailing-asian-boat-lake-sunny-day-with-amazing-view-scaled.jpg",
   },
 ];
+
+// travel post categories
+export const categories = [
+  { value: "Adventure", label: "Adventure" },
+  { value: "Business Travel", label: "Business Travel" },
+  { value: "Exploration", label: "Exploration" },
+];

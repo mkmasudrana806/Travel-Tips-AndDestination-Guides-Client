@@ -1,7 +1,7 @@
 import FeaturedDestinationsCarousel from "@/components/FeaturedDestinations";
+import PremiumPostsContainer from "@/components/posts/PremiumPostsContainer";
 import TravelMap from "@/components/TravelMaps";
 import TravelTrends from "@/components/TravelTrends";
-import PremiumPosts from "@/components/posts/PremiumPosts";
 
 export default function ExplorePage() {
   return (
@@ -21,7 +21,7 @@ export default function ExplorePage() {
       {/* search premium travel tips  */}
       <section className="mb-12">
         <h2 className="text-2xl font-semibold mb-4">Premium Travel Tips</h2>
-        <PremiumPosts />
+        <PremiumPostsContainer />
       </section>
 
       {/* travel trends  */}

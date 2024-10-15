@@ -52,6 +52,7 @@ export default function PostDetailsPage({ id }: { id: string }) {
   const handleUpvote = async (postId: string) => {
     if (!user) {
       router.push("/register");
+      return;
     }
     try {
       await upvotePost(postId);
@@ -65,6 +66,7 @@ export default function PostDetailsPage({ id }: { id: string }) {
   const handleDownvote = async (postId: string) => {
     if (!user) {
       router.push("/register");
+      return;
     }
     try {
       await downvotePost(postId);
@@ -188,7 +190,7 @@ export default function PostDetailsPage({ id }: { id: string }) {
         </CardFooter>
       </Card>
 
-      {/* comments section  */}
+      {/* comment form section  */}
       <div id="comment-section" className="mt-8">
         <h2 className="text-2xl font-bold mb-4">Comments</h2>
         <Card>
@@ -199,7 +201,6 @@ export default function PostDetailsPage({ id }: { id: string }) {
             <CommentForm refetchComment={refetchComments} id={id} />
           </CardContent>
         </Card>
-
         {/* comments containers  */}
         <div className="mt-6 space-y-4">{commentsContent}</div>
       </div>
