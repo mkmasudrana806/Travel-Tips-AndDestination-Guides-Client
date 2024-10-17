@@ -16,8 +16,8 @@ const commentApi = baseApi.injectEndpoints({
 
     // ---------- get comments of a post
     loadCommentsOfPost: builder.query({
-      query: (commentId) => {
-        return { url: `/comments/${commentId}` };
+      query: (postId) => {
+        return { url: `/comments/${postId}` };
       },
       providesTags: ["comments-post"],
     }),
@@ -74,24 +74,23 @@ const commentApi = baseApi.injectEndpoints({
     // ---------- delete single comment
     deleteComment: builder.mutation({
       query: (id) => ({
-        url: `/comment/${id}`,
+        url: `/comments/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_result, _error, arg) => [
-        { type: "comment", id: arg.id },
-      ],
+      invalidatesTags: ["comments-post"],
     }),
 
     // ---------- update single comment
     updateComment: builder.mutation({
-      query: ({ comment, commentId }) => {
+      query: (payload) => {
+        const { _id, ...updatedData } = payload;
         return {
-          url: `/comment/${commentId}`,
+          url: `/comments/${_id}`,
           method: "PATCH",
-          body: comment,
+          body: updatedData,
         };
       },
-      invalidatesTags: ["comment"],
+      invalidatesTags: ["comments-post"],
     }),
   }),
 });

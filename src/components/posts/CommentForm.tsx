@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 

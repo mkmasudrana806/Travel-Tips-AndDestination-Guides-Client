@@ -83,7 +83,6 @@ const userApi = baseApi.injectEndpoints({
     // get user followersAndFollowings
     getUserFollowersAndFollowigs: builder.mutation({
       query: (userids) => {
-        console.log(`getUserFollowersAndFollowigs: `, userids);
         return {
           url: `/users/followers-followings`,
           method: "POST",

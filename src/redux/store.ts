@@ -14,7 +14,7 @@ import {
 import userSlice from "./features/users/userSlice";
 import filterSlice from "./features/posts/filterSlice";
 import baseApi from "./api/baseApi";
-
+import commentSlice from "./features/comments/commentsSlice";
 // redux persistor
 const persistConfig = {
   key: "auth",
@@ -30,6 +30,7 @@ const store = configureStore({
     auth: persistedReducer,
     users: userSlice,
     filters: filterSlice,
+    comments: commentSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

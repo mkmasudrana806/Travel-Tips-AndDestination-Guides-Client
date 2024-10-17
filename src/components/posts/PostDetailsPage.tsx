@@ -23,7 +23,8 @@ import { TPost } from "@/types/postType";
 import { useAppSelector } from "@/redux/hooks";
 import { useLoadCommentsOfPostQuery } from "@/redux/features/comments/commentApi";
 import { TComment } from "@/types/commentType";
-import CommentForm from "../CommentForm";
+import CommentForm from "./CommentForm";
+import CommentCard from "./CommentCard";
 
 // ----------------- post details page ----------------
 export default function PostDetailsPage({ id }: { id: string }) {
@@ -94,17 +95,7 @@ export default function PostDetailsPage({ id }: { id: string }) {
     );
   } else if (!isLoading && !isError && comments?.data?.length > 0) {
     commentsContent = comments?.data?.map((comment: TComment) => (
-      <Card key={comment._id}>
-        <CardHeader>
-          <CardTitle className="text-lg">{comment?.userId?.name}</CardTitle>
-          <CardDescription>
-            {new Date(comment?.createdAt).toLocaleString()}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>{comment?.comment}</p>
-        </CardContent>
-      </Card>
+      <CommentCard postOwnerId={post?.data?.author?._id} key={comment?._id} comment={comment} />
     ));
   }
 
