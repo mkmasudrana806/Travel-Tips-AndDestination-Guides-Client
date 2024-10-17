@@ -4,9 +4,9 @@ const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // ----------- get current user
     getUserProfile: builder.query({
-      query: () => {
+      query: (userId) => {
         return {
-          url: "/users/getMe",
+          url: `/users/${userId}`,
         };
       },
       providesTags: (result) => [{ type: "user", id: result?.data?._id }],
@@ -68,6 +68,29 @@ const userApi = baseApi.injectEndpoints({
         { type: "user", id: arg.userId },
       ],
     }),
+
+    // follow unfollow user
+    followUnfollowUser: builder.mutation({
+      query: (targetUserId) => {
+        return {
+          url: `/users/follow-unfollow/${targetUserId}`,
+          method: "PATCH",
+        };
+      },
+      invalidatesTags: (result) => [{ type: "user", id: result?.data?._id }],
+    }),
+
+    // get user followersAndFollowings
+    getUserFollowersAndFollowigs: builder.mutation({
+      query: (userids) => {
+        console.log(`getUserFollowersAndFollowigs: `, userids);
+        return {
+          url: `/users/followers-followings`,
+          method: "POST",
+          body: userids,
+        };
+      },
+    }),
   }),
 });
 
@@ -78,4 +101,6 @@ export const {
   useToggleUserRoleMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useFollowUnfollowUserMutation,
+  useGetUserFollowersAndFollowigsMutation,
 } = userApi;

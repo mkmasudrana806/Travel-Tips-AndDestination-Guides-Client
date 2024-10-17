@@ -1,11 +1,13 @@
+"use client";
+
 import React from "react";
-import UserProfilePage from "@/components/UserProfile";
+import UserProfilePage from "@/components/profile/UserProfilePage";
 
 const page = ({ params }: { params: { userId: string } }) => {
+  console.log("current user: ", params.userId);
   return (
     <div>
-      <h1>User: {params.userId}</h1>
-      <UserProfilePage />
+      <UserProfilePage id={params?.userId} />
     </div>
   );
 };

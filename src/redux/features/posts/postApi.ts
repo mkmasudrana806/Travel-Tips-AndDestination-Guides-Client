@@ -46,6 +46,16 @@ const postApi = baseApi.injectEndpoints({
       providesTags: ["posts"],
     }),
 
+    // --------- get user posts
+    getUserPosts: builder.query({
+      query: (userId) => {
+        return { url: `/posts/my-posts/${userId}` };
+      },
+      providesTags: (_result, _error, arg) => [
+        { type: "user-posts", id: arg.userId },
+      ],
+    }),
+
     // ---------- load single post
     getPostById: builder.query({
       query: (id) => ({
@@ -108,6 +118,7 @@ const postApi = baseApi.injectEndpoints({
 export const {
   useCreatePostMutation,
   useLoadAllPostsQuery,
+  useGetUserPostsQuery,
   useGetPostByIdQuery,
   useDeletePostMutation,
   useUpdatePostMutation,

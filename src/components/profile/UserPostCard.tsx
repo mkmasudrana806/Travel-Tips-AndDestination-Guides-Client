@@ -1,31 +1,30 @@
-import { TPost } from "@/types/postType";
-import React from "react";
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ArrowBigDown, ArrowBigUp, Lock, MessageCircle } from "lucide-react";
+import { MessageCircle, ArrowBigDown, ArrowBigUp } from "lucide-react";
+import { TPost } from "@/types/postType";
 import { useAppSelector } from "@/redux/hooks";
 import {
   useDownVotePostMutation,
   useUpvotePostMutation,
 } from "@/redux/features/posts/postApi";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 type Props = {
   post: TPost;
 };
 
-// -------------- post card
-const PostCard: React.FC<Props> = ({ post }) => {
+// ----------- user post card
+const UserPostCard: React.FC<Props> = ({ post }) => {
   // --------------- redux
   const user = useAppSelector((state) => state.auth?.user);
 
@@ -71,69 +70,23 @@ const PostCard: React.FC<Props> = ({ post }) => {
     }
   };
 
-  // ----------- handle body content
-  const firstTagRegex = /<(\w+)[^>]*>(.*?)<\/\1>/i;
-  // Function to get the first tag's content
-  const getFirstTagContent = (htmlContent: string) => {
-    const match = htmlContent?.match(firstTagRegex);
-    if (match) {
-      const firstTagName = match[1]; // Get the tag name
-      // Check if the first tag is an <img> tag
-      if (firstTagName === "img") {
-        return ""; // Return empty for <img> tags
-      }
-      return match[0]; // Return the first tag's content with the tag
-    }
-    return ""; // Return empty if no tags are found
-  };
-
-  // Get the content of the first tag
-  const firstTagContent = getFirstTagContent(post?.content);
-
   return (
     <Card
       key={post?._id}
       className={!user?.premiumAccess && post?.premium ? "opacity-60" : ""}
     >
       <CardHeader>
-        <div className="relative">
-          <Image
-            src={post?.image}
-            alt={post?.title}
-            width={300}
-            height={200}
-            className="rounded-md mb-4"
-          />
-          <Badge variant="secondary" className="absolute top-2 right-2">
-            {post?.premium ? "Premium" : "Free"}
-          </Badge>
-        </div>
-        <CardTitle>
-          <Link
-            href={
-              !user?.premiumAccess && post?.premium
-                ? "/upgrade"
-                : `/posts/${post._id}`
-            }
-          >
-            {post?.title}
-          </Link>
-        </CardTitle>
-        <CardDescription>
-          <Link href={`/profile/${post.author?._id}`}>
-            By {post?.author?.name}
-          </Link>
-        </CardDescription>
+        <CardTitle className="text-lg">{post.title}</CardTitle>
       </CardHeader>
       <CardContent>
-        {firstTagContent === "" ? (
-          <p>No details</p>
-        ) : (
-          <div dangerouslySetInnerHTML={{ __html: firstTagContent }} />
-        )}
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <div className="flex space-x-4 text-sm text-muted-foreground">
+        <Image
+          src={post.image}
+          alt={post.title}
+          width={300}
+          height={200}
+          className="rounded-md mb-4"
+        />
+        <div className="flex justify-between text-sm text-muted-foreground">
           {/* upvote and downvote  */}
           <div className="flex items-center space-x-2  p-2 rounded-lg text-gray-600 font-medium">
             <ArrowBigUp
@@ -166,21 +119,22 @@ const PostCard: React.FC<Props> = ({ post }) => {
             </Link>
           </span>
         </div>
-        <Button
-          variant="outline"
-          disabled={!user?.premiumAccess && post?.premium}
-        >
-          {!post.premium || user?.premiumAccess ? (
-            <Link href={`/posts/${post._id}`}>Read More</Link>
-          ) : (
-            <>
-              <Lock className="mr-2 h-4 w-4" /> Locked
-            </>
-          )}
+      </CardContent>
+      <CardFooter>
+        <Button variant="ghost" asChild className="w-full">
+          <Link
+            href={
+              !user?.premiumAccess && post?.premium
+                ? "/upgrade"
+                : `/posts/${post?._id}`
+            }
+          >
+            View Post
+          </Link>
         </Button>
       </CardFooter>
     </Card>
   );
 };
 
-export default PostCard;
+export default UserPostCard;

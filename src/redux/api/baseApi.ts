@@ -61,6 +61,7 @@ const baseApi = createApi({
   tagTypes: [
     "posts",
     "post",
+    "user-posts",
     "comments",
     "comments-post",
     "comment",

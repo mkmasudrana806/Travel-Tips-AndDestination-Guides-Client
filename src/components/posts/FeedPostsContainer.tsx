@@ -86,6 +86,7 @@ export default function FeedPostsContainer() {
 
   // Infinite Scroll fetch more data function
   const fetchMoreData = () => {
+    console.log("Fetching more data called: ", page);
     setPage((prevPage) => prevPage + 1);
   };
 
@@ -95,10 +96,10 @@ export default function FeedPostsContainer() {
     content = <Loading />;
   } else if (isError) {
     content = <ErrorComponent />;
-  } else if (allPosts.length === 0) {
+  } else if (allPosts?.length === 0) {
     content = <DataNotFound />;
   } else {
-    content = allPosts.map((post) => <PostCard key={post._id} post={post} />);
+    content = allPosts?.map((post) => <PostCard key={post._id} post={post} />);
   }
 
   return (
