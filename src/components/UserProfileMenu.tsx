@@ -40,13 +40,13 @@ const UserProfileMenu = () => {
       </div>
       <div className="mt-3 px-2 space-y-1">
         <Link
-          href="/user-dashboard"
+          href={`/${user?.role}`}
           className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
         >
           Dashboard
         </Link>
         <Link
-          href="/profile/1"
+          href={`/profile/${user?.userId}`}
           className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
         >
           Profile

@@ -104,6 +104,7 @@ const Navbar = () => {
                   <Button onClick={handleLogout} className="mx-2">
                     Log out
                   </Button>
+                  
                   {/* user profile menu  */}
                   <Popover>
                     <PopoverTrigger asChild>

@@ -53,10 +53,17 @@ export default function FeedPostsContainer() {
     category: selectedCategory,
   });
 
-  // Update allPosts when new posts are fetched
   useEffect(() => {
     if (posts?.data?.length > 0) {
-      setAllPosts((prevPosts) => [...prevPosts, ...posts.data]);
+      setAllPosts((prevPosts) => {
+        const newPosts = [...prevPosts];
+        posts.data.forEach((post: TPost) => {
+          if (!newPosts.some((p) => p._id === post._id)) {
+            newPosts.push(post);
+          }
+        });
+        return newPosts;
+      });
     }
   }, [posts.data]);
 
