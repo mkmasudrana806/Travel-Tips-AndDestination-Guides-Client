@@ -12,15 +12,18 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Bell, Menu, Search, X } from "lucide-react";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import UserProfileMenu from "./UserProfileMenu";
+import { logout } from "@/redux/features/auth/authSlice";
 
 const Navbar = () => {
   // redux
   const isLoggedIn = useAppSelector((state) => state.auth.token);
+  const user = useAppSelector((state) => state.auth.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const [hasMounted, setHasMounted] = useState(false);
+  const dispatch = useAppDispatch();
 
   // Ensure that the component has mounted on the client side
   useEffect(() => {
@@ -31,6 +34,7 @@ const Navbar = () => {
     return null;
   }
 
+  // nav items
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Feeds", href: "/posts" },
@@ -41,6 +45,10 @@ const Navbar = () => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  // handle logout user
+  const handleLogout = () => {
+    dispatch(logout(undefined));
+  };
   return (
     <nav className="bg-background border-b">
       <div className="max-w-7xl mx-auto ">
@@ -93,17 +101,25 @@ const Navbar = () => {
                       <Bell className="h-5 w-5" />
                     </Link>
                   </Button>
+                  <Button onClick={handleLogout} className="mx-2">
+                    Log out
+                  </Button>
+                  {/* user profile menu  */}
                   <Popover>
                     <PopoverTrigger asChild>
                       <Avatar>
                         <AvatarImage
-                          src="https://d22e6o9mp4t2lx.cloudfront.net/cms/pfp3_d7855f9562.webp"
+                          src={
+                            user?.profilePicture
+                              ? user.profilePicture
+                              : "https://d22e6o9mp4t2lx.cloudfront.net/cms/pfp3_d7855f9562.webp"
+                          }
                           alt="@shadcn"
                         />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
                     </PopoverTrigger>
-                    <PopoverContent className="w-64 p-4">
+                    <PopoverContent className="max-w-fit p-4">
                       <UserProfileMenu />
                     </PopoverContent>
                   </Popover>

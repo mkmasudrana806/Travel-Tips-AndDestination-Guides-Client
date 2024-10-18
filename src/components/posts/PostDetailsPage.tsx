@@ -25,6 +25,7 @@ import { useLoadCommentsOfPostQuery } from "@/redux/features/comments/commentApi
 import { TComment } from "@/types/commentType";
 import CommentForm from "./CommentForm";
 import CommentCard from "./CommentCard";
+import Link from "next/link";
 
 // ----------------- post details page ----------------
 export default function PostDetailsPage({ id }: { id: string }) {
@@ -95,7 +96,11 @@ export default function PostDetailsPage({ id }: { id: string }) {
     );
   } else if (!isLoading && !isError && comments?.data?.length > 0) {
     commentsContent = comments?.data?.map((comment: TComment) => (
-      <CommentCard postOwnerId={post?.data?.author?._id} key={comment?._id} comment={comment} />
+      <CommentCard
+        postOwnerId={post?.data?.author?._id}
+        key={comment?._id}
+        comment={comment}
+      />
     ));
   }
 
@@ -108,7 +113,9 @@ export default function PostDetailsPage({ id }: { id: string }) {
             <div>
               <CardTitle className="text-3xl mb-2">{postData?.title}</CardTitle>
               <CardDescription>
-                <span className="mr-4">By {postData?.author?.name}</span>
+                <Link href={`/profile/${postData?.author?._id}`}>
+                  <span className="mr-4">By {postData?.author?.name}</span>
+                </Link>
                 <span className="mr-4">Category: {postData?.category}</span>
                 <span>
                   {new Date(postData?.createdAt).toLocaleDateString()}
@@ -135,7 +142,7 @@ export default function PostDetailsPage({ id }: { id: string }) {
             <div>
               <p className="font-semibold">{postData?.author?.name}</p>
               <p className="text-sm text-muted-foreground">
-                @{postData?.author?.email}
+                @{postData?.author?.email?.split("@")[0]}
               </p>
             </div>
             {postData?.author?.isVerified && (

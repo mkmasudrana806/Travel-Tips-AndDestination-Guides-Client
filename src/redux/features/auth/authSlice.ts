@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export type TUser = {
+  name: string;
   userId: string;
   email: string;
   role: string;
@@ -8,6 +9,7 @@ export type TUser = {
   isVerified: boolean;
   iat: number;
   exp: number;
+  profilePicture: string;
 };
 type TAuthState = {
   user: null | TUser;

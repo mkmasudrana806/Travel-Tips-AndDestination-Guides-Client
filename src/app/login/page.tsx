@@ -1,5 +1,5 @@
 "use client";
-
+import { setCookie } from "cookies-next";
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -69,6 +69,10 @@ export default function LoginPage() {
       if (result?.data?.success) {
         const user = verifyToken(result?.data?.data?.accessToken) as TUser;
         dispatch(setUser({ user, token: result?.data?.data?.accessToken }));
+
+        // Set a persistent cookie for user role, expires in 1 year
+        setCookie("role", user.role, { maxAge: 60 * 60 * 24 * 365, path: "/" });
+
         setSuccessMessage("Login successful! Redirecting to previous page...");
         setTimeout(() => {
           router.push("/");
