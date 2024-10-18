@@ -23,20 +23,134 @@ type Props = {
   post: TPost;
 };
 
+// export default function PostCard({ post }: Props) {
+//   const user = useAppSelector((state) => state.auth?.user);
+//   const [upvotePost] = useUpvotePostMutation();
+//   const [downvotePost] = useDownVotePostMutation();
+//   const router = useRouter();
+
+//   // ---------- find out if user upvote,downvote,isPostOwner or has access
+//   const isUpvoted = post?.upvotes?.includes(user?.userId as string);
+//   const isDownvoted = post?.downvotes?.includes(user?.userId as string);
+//   const isPostOwner = user?.userId === post?.author?._id;
+//   const hasAccess = !post.premium || user?.premiumAccess || isPostOwner;
+
+//   // -------------- handle upvote
+//   const handleVote = async (voteType: "upvote" | "downvote") => {
+//     if (!user?.userId) {
+//       router.push("/register");
+//       return;
+//     }
+//     if (!hasAccess) {
+//       router.push("/upgrade");
+//       return;
+//     }
+//     try {
+//       await (voteType === "upvote"
+//         ? upvotePost(post._id)
+//         : downvotePost(post._id));
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
+
+//   // ------------- handle downvote
+//   const getFirstTagContent = (htmlContent: string) => {
+//     const firstTagRegex = /<(\w+)[^>]*>(.*?)<\/\1>/i;
+//     const match = htmlContent?.match(firstTagRegex);
+//     if (match && match[1] !== "img") {
+//       return match[0];
+//     }
+//     return "";
+//   };
+
+//   const firstTagContent = getFirstTagContent(post?.content);
+
+//   // post link to redirect based on user type
+//   const postLink = hasAccess ? `/posts/${post._id}` : "/upgrade";
+
+//   return (
+//     <Card className={hasAccess ? "" : "opacity-60"}>
+//       <CardHeader>
+//         <div className="relative">
+//           <Image
+//             src={post?.image}
+//             alt={post?.title}
+//             width={300}
+//             height={200}
+//             className="rounded-md mb-4"
+//           />
+//           <Badge variant="secondary" className="absolute top-2 right-2">
+//             {post?.premium ? "Premium" : "Free"}
+//           </Badge>
+//         </div>
+//         <CardTitle>
+//           <Link href={postLink}>{post?.title}</Link>
+//         </CardTitle>
+//         <CardDescription>
+//           <Link href={`/profile/${post.author?._id}`}>
+//             By {post?.author?.name}
+//           </Link>
+//         </CardDescription>
+//       </CardHeader>
+//       <CardContent>
+//         {firstTagContent ? (
+//           <div dangerouslySetInnerHTML={{ __html: firstTagContent }} />
+//         ) : (
+//           <p>No details</p>
+//         )}
+//       </CardContent>
+//       <CardFooter className="flex justify-between">
+//         <div className="flex space-x-4 text-sm text-muted-foreground">
+//           <div className="flex items-center space-x-2 p-2 rounded-lg text-gray-600 font-medium">
+//             <ArrowBigUp
+//               onClick={() => handleVote("upvote")}
+//               className={`h-6 w-6 hover:text-green-600 cursor-pointer ${
+//                 isUpvoted ? "text-green-600" : ""
+//               }`}
+//             />
+//             <span>{post?.upvotes?.length}</span>
+//             <ArrowBigDown
+//               onClick={() => handleVote("downvote")}
+//               className={`h-6 w-6 hover:text-red-600 cursor-pointer ${
+//                 isDownvoted ? "text-red-600" : ""
+//               }`}
+//             />
+//             <span>{post?.downvotes?.length}</span>
+//           </div>
+//           <span className="flex">
+//             <Link className="flex items-center" href={postLink}>
+//               <MessageCircle className="mr-1 h-4 w-4" />{" "}
+//               {post?.commentCount || 0}
+//             </Link>
+//           </span>
+//         </div>
+//         <Button variant="outline" disabled={!hasAccess}>
+//           {hasAccess ? (
+//             <Link href={postLink}>Read More</Link>
+//           ) : (
+//             <>
+//               <Lock className="mr-2 h-4 w-4" /> Locked
+//             </>
+//           )}
+//         </Button>
+//       </CardFooter>
+//     </Card>
+//   );
+// }
+
 export default function PostCard({ post }: Props) {
   const user = useAppSelector((state) => state.auth?.user);
   const [upvotePost] = useUpvotePostMutation();
   const [downvotePost] = useDownVotePostMutation();
   const router = useRouter();
 
-  // ---------- find out if user upvote,downvote,isPostOwner or has access
   const isUpvoted = post?.upvotes?.includes(user?.userId as string);
   const isDownvoted = post?.downvotes?.includes(user?.userId as string);
   const isPostOwner = user?.userId === post?.author?._id;
   const hasAccess = !post.premium || user?.premiumAccess || isPostOwner;
 
-  // -------------- handle upvote
-  const handleVote = async (voteType: "upvote" | "downvote") => {
+  const handleVote = async (voteType: 'upvote' | 'downvote') => {
     if (!user?.userId) {
       router.push("/register");
       return;
@@ -46,15 +160,12 @@ export default function PostCard({ post }: Props) {
       return;
     }
     try {
-      await (voteType === "upvote"
-        ? upvotePost(post._id)
-        : downvotePost(post._id));
+      await (voteType === 'upvote' ? upvotePost(post._id) : downvotePost(post._id));
     } catch (error) {
       console.log(error);
     }
   };
 
-  // ------------- handle downvote
   const getFirstTagContent = (htmlContent: string) => {
     const firstTagRegex = /<(\w+)[^>]*>(.*?)<\/\1>/i;
     const match = htmlContent?.match(firstTagRegex);
@@ -66,25 +177,24 @@ export default function PostCard({ post }: Props) {
 
   const firstTagContent = getFirstTagContent(post?.content);
 
-  // post link to redirect based on user type
   const postLink = hasAccess ? `/posts/${post._id}` : "/upgrade";
 
   return (
-    <Card className={hasAccess ? "" : "opacity-60"}>
-      <CardHeader>
+    <Card className={`${hasAccess ? "" : "opacity-60"} flex flex-col h-full`}>
+      <CardHeader className="flex-grow-0">
         <div className="relative">
           <Image
             src={post?.image}
             alt={post?.title}
             width={300}
             height={200}
-            className="rounded-md mb-4"
+            className="rounded-md mb-4 w-full h-48 object-cover"
           />
           <Badge variant="secondary" className="absolute top-2 right-2">
             {post?.premium ? "Premium" : "Free"}
           </Badge>
         </div>
-        <CardTitle>
+        <CardTitle className="line-clamp-2   overflow-hidden">
           <Link href={postLink}>{post?.title}</Link>
         </CardTitle>
         <CardDescription>
@@ -93,25 +203,28 @@ export default function PostCard({ post }: Props) {
           </Link>
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-grow">
         {firstTagContent ? (
-          <div dangerouslySetInnerHTML={{ __html: firstTagContent }} />
+          <div 
+            className="line-clamp-4 overflow-hidden" 
+            dangerouslySetInnerHTML={{ __html: firstTagContent }} 
+          />
         ) : (
           <p>No details</p>
         )}
       </CardContent>
-      <CardFooter className="flex justify-between">
+      <CardFooter className="flex justify-between mt-auto">
         <div className="flex space-x-4 text-sm text-muted-foreground">
           <div className="flex items-center space-x-2 p-2 rounded-lg text-gray-600 font-medium">
             <ArrowBigUp
-              onClick={() => handleVote("upvote")}
+              onClick={() => handleVote('upvote')}
               className={`h-6 w-6 hover:text-green-600 cursor-pointer ${
                 isUpvoted ? "text-green-600" : ""
               }`}
             />
             <span>{post?.upvotes?.length}</span>
             <ArrowBigDown
-              onClick={() => handleVote("downvote")}
+              onClick={() => handleVote('downvote')}
               className={`h-6 w-6 hover:text-red-600 cursor-pointer ${
                 isDownvoted ? "text-red-600" : ""
               }`}

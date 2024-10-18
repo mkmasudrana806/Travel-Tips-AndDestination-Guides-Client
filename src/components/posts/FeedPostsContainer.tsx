@@ -93,7 +93,6 @@ export default function FeedPostsContainer() {
 
   // Infinite Scroll fetch more data function
   const fetchMoreData = () => {
-    console.log("Fetching more data called: ", page);
     setPage((prevPage) => prevPage + 1);
   };
 
