@@ -93,9 +93,9 @@ const postApi = baseApi.injectEndpoints({
           method: "PATCH",
         };
       },
-      invalidatesTags: (_result, _error, postId) => [
+      invalidatesTags: (_result, _error, arg) => [
         { type: "posts" },
-        { type: "post", id: postId },
+        { type: "post", id: arg },
       ],
     }),
 
@@ -107,9 +107,9 @@ const postApi = baseApi.injectEndpoints({
           method: "PATCH",
         };
       },
-      invalidatesTags: (_result, _error, postId) => [
+      invalidatesTags: (_result, _error, arg) => [
         { type: "posts" },
-        { type: "post", id: postId },
+        { type: "post", id: arg },
       ],
     }),
   }),

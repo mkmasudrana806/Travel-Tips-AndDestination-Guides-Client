@@ -1,4 +1,15 @@
 "use client";
+
+import { useAppSelector } from "@/redux/hooks";
+import {
+  useDownVotePostMutation,
+  useUpvotePostMutation,
+} from "@/redux/features/posts/postApi";
+import { TPost } from "@/types/postType";
+import { MessageCircle, ArrowBigUp, ArrowBigDown } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -7,131 +18,114 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  useDownVotePostMutation,
-  useUpvotePostMutation,
-} from "@/redux/features/posts/postApi";
-import { useAppSelector } from "@/redux/hooks";
-import { TPost } from "@/types/postType";
-import { MessageCircle, ArrowBigUp, ArrowBigDown } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 type Props = {
   post: TPost;
 };
 
-const PostCard: React.FC<Props> = ({ post }) => {
+export default function PostCard({ post }: Props) {
   // ------------- redux
   const user = useAppSelector((state) => state.auth.token);
   const [upvotePost] = useUpvotePostMutation();
   const [downvotePost] = useDownVotePostMutation();
-
-  // ------------ react
   const router = useRouter();
-  // check if logged in user upvote this post
-  const isUpvote = post?.upvotes?.includes("6708ee01d23b285fff6c1a9a");
-  const isDownvote = post?.downvotes?.includes("6708ee01d23b285fff6c1a9a");
 
-  // ----------- handle upvote
-  const handleUpvote = async (postId: string) => {
+  // ------------------- react
+  const isUpvoted = post?.upvotes?.includes("6708ee01d23b285fff6c1a9a");
+  const isDownvoted = post?.downvotes?.includes("6708ee01d23b285fff6c1a9a");
+
+  // ------------ handle upvote and downvote ------------
+  const handleVote = async (voteType: "upvote" | "downvote") => {
     if (!user) {
       router.push("/register");
       return;
     }
     try {
-      await upvotePost(postId);
+      await (voteType === "upvote"
+        ? upvotePost(post._id)
+        : downvotePost(post._id));
     } catch (error) {
-      console.log(error);
+      console.error("Error voting:", error);
     }
   };
 
-  // ----------- handle downvote
-  const handleDownvote = async (postId: string) => {
-    if (!user) {
-      router.push("/register");
-      return;
-    }
-    try {
-      await downvotePost(postId);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // ----------- handle body content
-  const firstTagRegex = /<(\w+)[^>]*>(.*?)<\/\1>/i;
-  // Function to get the first tag's content
+  // ------------- get the first tag content
   const getFirstTagContent = (htmlContent: string) => {
-    const match = htmlContent.match(firstTagRegex);
-    if (match) {
-      const firstTagName = match[1]; // Get the tag name
-      // Check if the first tag is an <img> tag
-      if (firstTagName === "img") {
-        return ""; // Return empty for <img> tags
-      }
-      return match[0]; // Return the first tag's content with the tag
+    const firstTagRegex = /<(\w+)[^>]*>(.*?)<\/\1>/i;
+    const match = htmlContent?.match(firstTagRegex);
+    if (match && match[1] !== "img") {
+      return match[0];
     }
-    return ""; // Return empty if no tags are found
+    return "";
   };
 
-  // Get the content of the first tag
   const firstTagContent = getFirstTagContent(post?.content);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{post.title}</CardTitle>
-        <Link href={`/profile/${post._id}`}>
+    <Card className="flex  flex-col h-full">
+      <CardHeader className="flex-grow-0 ">
+        <CardTitle className="line-clamp-2  overflow-hidden">
+          <Link href={`/posts/${post?._id}`} className="hover:underline">
+            {post.title}
+          </Link>
+        </CardTitle>
+        <Link href={`/profile/${post._id}`} className="hover:underline">
           <CardDescription>{post?.author?.name}</CardDescription>
         </Link>
       </CardHeader>
-      <Link href={`/posts/${post?._id}`}>
+      <Link href={`/posts/${post?._id}`} className="flex-grow">
         <CardContent>
-          <Image
-            src={post.image}
-            alt="Bali scenery"
-            width={400}
-            height={200}
-            className="rounded-md mb-4"
-          />
-          {firstTagContent === "" ? (
-            <p>No details</p>
-          ) : (
-            <div dangerouslySetInnerHTML={{ __html: firstTagContent }} />
-          )}
+          <div className="relative w-full h-48 mb-4">
+            <Image
+              src={post.image}
+              alt={post.title}
+              layout="fill"
+              objectFit="cover"
+              className="rounded-md"
+            />
+          </div>
+          <div className="line-clamp-3 overflow-hidden">
+            {firstTagContent ? (
+              <div dangerouslySetInnerHTML={{ __html: firstTagContent }} />
+            ) : (
+              <p>No details</p>
+            )}
+          </div>
         </CardContent>
       </Link>
-      <CardFooter className="flex justify-between">
-        {/* upvote and downvote  */}
-        <div className="flex items-center space-x-2  p-2 rounded-lg text-gray-600 font-medium">
-          <ArrowBigUp
-            onClick={() => handleUpvote(post._id)}
-            className={`h-6 w-6 hover:text-green-600 cursor-pointer ${
-              isUpvote ? "text-green-600" : ""
+      <CardFooter className="flex justify-between mt-auto">
+        {/* upvote and downvote */}
+        <div className="flex items-center space-x-2 p-2 rounded-lg text-gray-600 font-medium">
+          <button
+            onClick={() => handleVote("upvote")}
+            className={`flex items-center hover:text-green-600 ${
+              isUpvoted ? "text-green-600" : ""
             }`}
-          />
-          <span>{post?.upvotes?.length}</span>
-          <ArrowBigDown
-            onClick={() => handleDownvote(post._id)}
-            className={`h-6 w-6 hover:text-red-600 cursor-pointer ${
-              isDownvote ? "text-red-600" : ""
+            aria-label="Upvote"
+          >
+            <ArrowBigUp className="h-6 w-6 mr-1" />
+            <span>{post?.upvotes?.length || 0}</span>
+          </button>
+          <button
+            onClick={() => handleVote("downvote")}
+            className={`flex items-center hover:text-red-600 ${
+              isDownvoted ? "text-red-600" : ""
             }`}
-          />
-          <span>{post?.downvotes?.length}</span>
+            aria-label="Downvote"
+          >
+            <ArrowBigDown className="h-6 w-6 mr-1" />
+            <span>{post?.downvotes?.length || 0}</span>
+          </button>
         </div>
-
-        {/* comments  */}
-        <Link href={`/posts/${post?._id}`}>
-          <div className="flex items-center space-x-2">
-            <MessageCircle className="w-4 h-4" />
-            <span>{post?.commentCount ? post?.commentCount : 0}</span>
-          </div>
+        {/* comment  */}
+        <Link
+          href={`/posts/${post?._id}`}
+          className="flex items-center space-x-2 hover:underline"
+        >
+          <MessageCircle className="w-4 h-4" />
+          <span>{post?.commentCount || 0}</span>
         </Link>
       </CardFooter>
     </Card>
   );
-};
-
-export default PostCard;
+}

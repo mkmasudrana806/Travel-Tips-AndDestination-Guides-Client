@@ -56,8 +56,8 @@ export default function FeedPostsContainer() {
   useEffect(() => {
     if (posts?.data?.length > 0) {
       setAllPosts((prevPosts) => {
-        const newPosts = [...prevPosts];
-        posts.data.forEach((post: TPost) => {
+        const newPosts = [...posts?.data];
+        prevPosts?.forEach((post: TPost) => {
           if (!newPosts.some((p) => p._id === post._id)) {
             newPosts.push(post);
           }

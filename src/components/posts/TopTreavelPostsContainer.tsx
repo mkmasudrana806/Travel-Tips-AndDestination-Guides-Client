@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import PostCard from "./FeaturedPostCard";
+import FeaturedPostCard from "./FeaturedPostCard";
 import { TPost } from "@/types/postType";
 import { useLoadAllPostsQuery } from "@/redux/features/posts/postApi";
 import Loading from "../message/Loading";
@@ -11,7 +11,12 @@ import { TCommentCounts } from "@/types/commentCountsType";
 
 const TopTreavelPostsContainer = () => {
   // --------------- redux
-  const { data: posts, isLoading, isError } = useLoadAllPostsQuery({});
+  const {
+    data: posts,
+    isLoading,
+    isError,
+  } = useLoadAllPostsQuery({ premium: false });
+
   let postIds = [];
   if (!isLoading && !isError && posts?.data) {
     postIds = posts.data.map((post: TPost) => post._id);
@@ -43,7 +48,7 @@ const TopTreavelPostsContainer = () => {
   } else if (!isLoading && !isError && postsData?.length > 0) {
     content = postsData
       ?.slice(0, 6)
-      .map((post: TPost) => <PostCard key={post._id} post={post} />);
+      .map((post: TPost) => <FeaturedPostCard key={post._id} post={post} />);
   }
 
   return (
