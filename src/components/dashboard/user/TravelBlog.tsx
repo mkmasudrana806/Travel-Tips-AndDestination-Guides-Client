@@ -20,7 +20,7 @@ const TravelBlog = () => {
     data: posts = { data: [] },
     isLoading,
     isError,
-    refetch
+    refetch,
   } = useGetUserPostsQuery(userId, {
     skip: !userId,
   });
@@ -47,6 +47,11 @@ const TravelBlog = () => {
     };
   });
 
+  // make categories lists daynamically based on data
+  const categories = Array.from(
+    new Set(posts?.data.map((post: any) => post?.category))
+  );
+
   return (
     <div className="container mx-auto">
       <div className="flex justify-between items-center mb-8">
@@ -63,14 +68,15 @@ const TravelBlog = () => {
         </Dialog>
       </div>
 
-      {/* posts tabs */}
+      {/* categories posts tabs */}
       <Tabs defaultValue="all" className="space-y-4">
         <TabsList>
           <TabsTrigger value="all">All Posts</TabsTrigger>
-          <TabsTrigger value="adventure">Adventure</TabsTrigger>
-          <TabsTrigger value="food">Food</TabsTrigger>
-          <TabsTrigger value="culture">Culture</TabsTrigger>
-          <TabsTrigger value="tips">Travel Tips</TabsTrigger>
+          {categories?.map((category: any) => (
+            <TabsTrigger key={category} value={category}>
+              {category}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
         {/* all posts  */}
@@ -83,59 +89,17 @@ const TravelBlog = () => {
         </TabsContent>
 
         {/* specific post category  */}
-        {/* {["adventure", "food", "culture", "tips"].map((category) => (
-          <TabsContent key={category} value={category}>
+        {categories?.map((category, index) => (
+          <TabsContent key={index} value={category as string}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {posts
-                .filter((post) => post.category === category)
-                .map((post) => (
-                  <Card key={post.id}>
-                    <CardHeader>
-                      <CardTitle>{post.title}</CardTitle>
-                      <CardDescription>
-                        {format(post.date, "MMMM d, yyyy")}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        {post.content.substring(0, 100)}...
-                      </p>
-                    </CardContent>
-                    <CardFooter className="flex justify-between">
-                      <div className="flex space-x-4 text-sm text-muted-foreground">
-                        <span className="flex items-center">
-                          <ThumbsUp className="h-4 w-4 mr-1" />
-                          {post.likes}
-                        </span>
-                        <span className="flex items-center">
-                          <MessageSquare className="h-4 w-4 mr-1" />
-                          {post.comments}
-                        </span>
-                      </div>
-                      <div className="flex space-x-2">
-                        <Button variant="ghost" size="sm">
-                          <Eye className="h-4 w-4 mr-2" />
-                          View
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <Edit className="h-4 w-4 mr-2" />
-                          Edit
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDeletePost(post.id)}
-                        >
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          Delete
-                        </Button>
-                      </div>
-                    </CardFooter>
-                  </Card>
+              {postsData
+                ?.filter((post: TPost) => post.category === category)
+                .map((post: TPost) => (
+                  <PostCard key={post._id} post={post} refetch={refetch} />
                 ))}
             </div>
           </TabsContent>
-        ))} */}
+        ))}
       </Tabs>
     </div>
   );
