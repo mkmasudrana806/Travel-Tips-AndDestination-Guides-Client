@@ -22,12 +22,12 @@ const UserDashboard = () => {
     switch (activeTab) {
       case "overview":
         return <DashboardOverview />;
-      case "profile":
-        return <ProfilePage />;
       case "posts":
         return <TravelBlog />;
       case "payments history":
         return <PaymentManagement />;
+      case "profile":
+        return <ProfilePage />;
       case "settings":
         return <AccountSettings />;
       default:

@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -36,6 +38,8 @@ export default function PostInputHome() {
 
           {/* Modal to create a post */}
           <DialogContent className="xs:max-w-[100%] sm:max-w-[90%] md:max-w-[80%] lg:max-w-[70%] max-h-[100vh] overflow-y-auto">
+            <DialogTitle> </DialogTitle>
+            <DialogDescription></DialogDescription>
             <CreatePostModal />
           </DialogContent>
         </Dialog>

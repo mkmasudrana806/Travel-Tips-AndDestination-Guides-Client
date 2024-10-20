@@ -1,3 +1,4 @@
+import { TPost } from "@/types/postType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface FilterState {
@@ -6,6 +7,7 @@ interface FilterState {
   sortBy: string;
   limit: number;
   page: number;
+  editPostData: TPost | null;
 }
 
 const initialState: FilterState = {
@@ -14,6 +16,7 @@ const initialState: FilterState = {
   sortBy: "",
   limit: 5,
   page: 1,
+  editPostData: null,
 };
 
 const filterSlice = createSlice({
@@ -41,6 +44,14 @@ const filterSlice = createSlice({
       state.limit = initialState.limit;
       state.page = initialState.page;
     },
+    // edit a user
+    setEditPostData: (state, action) => {
+      state.editPostData = action.payload;
+    },
+    // clear edit Post
+    clearEditPostData: (state) => {
+      state.editPostData = null;
+    },
   },
 });
 
@@ -51,6 +62,8 @@ export const {
   setLimit,
   setPage,
   resetFilters,
+  setEditPostData,
+  clearEditPostData,
 } = filterSlice.actions;
 
 export default filterSlice.reducer;

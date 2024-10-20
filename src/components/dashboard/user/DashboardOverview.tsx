@@ -52,6 +52,7 @@ const DashboardOverview = () => {
 
   const [activeTab, setActiveTab] = useState("overview");
 
+  // upcomming trips details static now
   const upcomingTrips = [
     { id: 1, destination: "Tokyo, Japan", date: "Aug 15 - Aug 25, 2023" },
     { id: 2, destination: "Santorini, Greece", date: "Sep 5 - Sep 12, 2023" },

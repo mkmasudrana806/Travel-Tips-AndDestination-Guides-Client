@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,13 +27,22 @@ import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import { useRouter } from "next/navigation";
-import { useCreatePostMutation } from "@/redux/features/posts/postApi";
+import {
+  useCreatePostMutation,
+  useUpdatePostMutation,
+} from "@/redux/features/posts/postApi";
 import { categories } from "@/constant";
+import { useAppSelector } from "@/redux/hooks";
 
 // ---------------- create post modal component ----------------
 export default function CreatePostModal() {
   // ------------- redux ---------------
   const [createPost] = useCreatePostMutation();
+  const [updatePost] = useUpdatePostMutation();
+  const showEditPostData = useAppSelector(
+    (state) => state.filters.editPostData
+  );
+  const user = useAppSelector((state) => state.auth.user?.userId);
 
   // -------------- react ------------
   const [formData, setFormData] = useState({
@@ -48,6 +57,17 @@ export default function CreatePostModal() {
   const [file, setFile] = useState<File | any>(null);
 
   const router = useRouter();
+
+  // load post data to form
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      title: showEditPostData?.title as string,
+      category: showEditPostData?.category as string,
+      content: showEditPostData?.content as string,
+      premium: showEditPostData?.premium as boolean,
+    }));
+  }, [showEditPostData]);
 
   // ----------- handle input fields -----------------------
   const handleChange = (name: string, value: string | boolean) => {
@@ -77,31 +97,59 @@ export default function CreatePostModal() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // ------------ handle create a post ----------------
+  // ------------ handle create or update a post ----------------
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validateForm()) return;
-    setIsLoading(true);
-    const data = new FormData();
-    try {
-      data.append("file", file);
-      data.append("data", JSON.stringify(formData));
 
-      // hit api to create a post
-      const result: any = await createPost(data);
+    // redirect to login page if user is not logged in
+    if (!user) {
+      router.push("/login");
+    }
 
-      if (result?.data?.success) {
-        setSuccessMessage("Post created successfully!");
-        setTimeout(() => {
-          router.push("/");
-        }, 1000);
-      } else {
-        throw new Error(result?.error?.data?.message);
+    // --------- update a post
+    if (showEditPostData) {
+      setIsLoading(true);
+      try {
+        // hit api to update a post
+        const result: any = await updatePost({postId: showEditPostData?._id, post: formData});
+        if (result?.data?.success) {
+          setSuccessMessage("Post updated successfully!");
+          setTimeout(() => {
+            router.push("/");
+          }, 1000);
+        } else {
+          throw new Error(result?.error?.data?.message);
+        }
+      } catch (error: any) {
+        setErrors({ form: error?.message });
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error: any) {
-      setErrors({ form: error?.message });
-    } finally {
-      setIsLoading(false);
+    } else {
+      // -------- create a post
+      if (!validateForm()) return;
+      setIsLoading(true);
+      const data = new FormData();
+      try {
+        data.append("file", file);
+        data.append("data", JSON.stringify(formData));
+
+        // hit api to create a post
+        const result: any = await createPost(data);
+
+        if (result?.data?.success) {
+          setSuccessMessage("Post created successfully!");
+          setTimeout(() => {
+            router.push("/");
+          }, 1000);
+        } else {
+          throw new Error(result?.error?.data?.message);
+        }
+      } catch (error: any) {
+        setErrors({ form: error?.message });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -232,7 +280,13 @@ export default function CreatePostModal() {
             )}
 
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Creating Post..." : "Create Post"}
+              {isLoading
+                ? showEditPostData
+                  ? "Updating Post..."
+                  : "Creating Post..."
+                : showEditPostData
+                ? "Update Post"
+                : "Create Post"}
             </Button>
           </form>
         </CardContent>

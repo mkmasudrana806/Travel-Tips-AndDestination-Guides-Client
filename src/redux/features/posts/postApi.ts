@@ -67,22 +67,26 @@ const postApi = baseApi.injectEndpoints({
     // ---------- delete single post
     deletePost: builder.mutation({
       query: (id) => ({
-        url: `/post/${id}`,
+        url: `/posts/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_result, _error, arg) => [{ type: "post", id: arg.id }],
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "user-posts", id: arg },
+      ],
     }),
 
     // ---------- update single post
     updatePost: builder.mutation({
-      query: ({ post, postId }) => {
+      query: ({ postId, post }) => {
         return {
-          url: `/post/${postId}`,
+          url: `/posts/${postId}`,
           method: "PATCH",
           body: post,
         };
       },
-      invalidatesTags: ["post"],
+      invalidatesTags: (result, error, arg) => [
+        { type: "post", id: arg.postId },
+      ],
     }),
 
     // ---------- upvote a post
