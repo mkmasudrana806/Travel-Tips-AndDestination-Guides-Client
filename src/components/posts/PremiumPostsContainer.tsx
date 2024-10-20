@@ -40,6 +40,14 @@ const PremiumPostsContainer = () => {
     };
   });
 
+  // const [loading, setLoading] = useState(true);
+  // useEffect(() => {
+  //   setLoading(true);
+  // }, [setLoading]);
+
+  if (isPostLoading) {
+    return <h1>Loading...</h1>;
+  }
   // --------- decide what to render for comments
   let premiumPostsContent = null;
   if (isPostLoading) {

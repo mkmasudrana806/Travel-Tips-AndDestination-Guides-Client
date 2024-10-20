@@ -19,7 +19,7 @@ const TopTreavelPostsContainer = () => {
 
   let postIds = [];
   if (!isLoading && !isError && posts?.data) {
-    postIds = posts.data.map((post: TPost) => post._id);
+    postIds = posts?.data.map((post: TPost) => post?._id);
   }
   const { data: commentsCounts } = useCommentsCountsForAllPostsQuery(postIds, {
     skip: !postIds.length,

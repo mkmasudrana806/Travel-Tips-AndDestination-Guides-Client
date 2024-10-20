@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { MessageCircle, ArrowBigDown, ArrowBigUp } from "lucide-react";
+import { MessageCircle, ArrowBigDown, ArrowBigUp, Lock } from "lucide-react";
 import { TPost } from "@/types/postType";
 import { useAppSelector } from "@/redux/hooks";
 import {
@@ -20,121 +20,113 @@ import {
 import { useRouter } from "next/navigation";
 
 type Props = {
+  refetch: () => void;
   post: TPost;
 };
 
-// ----------- user post card
-const UserPostCard: React.FC<Props> = ({ post }) => {
-  // --------------- redux
+export default function UserPostCard({ refetch, post }: Props) {
+  // -------------- redux
   const user = useAppSelector((state) => state.auth?.user);
-
   const [upvotePost] = useUpvotePostMutation();
   const [downvotePost] = useDownVotePostMutation();
-
-  // ------------ react
   const router = useRouter();
 
-  // check if logged in user upvote this post
-  const isUpvote = post?.upvotes?.includes(user?.userId as string);
-  const isDownvote = post?.downvotes?.includes(user?.userId as string);
+  // ------------ react
+  const isUpvoted = post?.upvotes?.includes(user?.userId as string);
+  const isDownvoted = post?.downvotes?.includes(user?.userId as string);
+  const isPostOwner = user?.userId === post?.author?._id;
+  const hasAccess = !post.premium || user?.premiumAccess || isPostOwner;
 
-  // ----------- handle upvote
-  const handleUpvote = async (postId: string) => {
+  // ------------------ handle upvote and downvote
+  const handleVote = async (voteType: "upvote" | "downvote") => {
     if (!user?.userId) {
       router.push("/register");
       return;
-    } else if (!user.premiumAccess && post.premium) {
+    }
+    if (!hasAccess) {
       router.push("/upgrade");
       return;
     }
     try {
-      await upvotePost(postId);
+      await (voteType === "upvote"
+        ? upvotePost(post._id)
+        : downvotePost(post._id));
+      refetch();
     } catch (error) {
-      console.log(error);
+      console.error("Error voting:", error);
     }
   };
 
-  // ----------- handle downvote
-  const handleDownvote = async (postId: string) => {
-    if (!user?.userId) {
-      router.push("/register");
-      return;
-    } else if (!user.premiumAccess && post.premium) {
-      router.push("/upgrade");
-      return;
-    }
-    try {
-      await downvotePost(postId);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // -------------- dynamically postLink
+  const postLink = hasAccess ? `/posts/${post._id}` : "/upgrade";
 
   return (
     <Card
       key={post?._id}
-      className={!user?.premiumAccess && post?.premium ? "opacity-60" : ""}
+      className={`flex flex-col h-full ${hasAccess ? "" : "opacity-60"}`}
     >
       <CardHeader>
-        <CardTitle className="text-lg">{post.title}</CardTitle>
+        <CardTitle className="text-lg line-clamp-2   overflow-hidden">
+          {post.title}
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <Image
-          src={post.image}
-          alt={post.title}
-          width={300}
-          height={200}
-          className="rounded-md mb-4"
-        />
+      <CardContent className="flex-grow pb-0">
+        <div className="relative w-full h-48 mb-4">
+          <Image
+            src={post.image}
+            alt={post.title}
+            layout="fill"
+            objectFit="cover"
+            className="rounded-md"
+          />
+        </div>
         <div className="flex justify-between text-sm text-muted-foreground">
-          {/* upvote and downvote  */}
-          <div className="flex items-center space-x-2  p-2 rounded-lg text-gray-600 font-medium">
-            <ArrowBigUp
-              onClick={() => handleUpvote(post._id)}
-              className={`h-6 w-6 hover:text-green-600 cursor-pointer ${
-                isUpvote ? "text-green-600" : ""
+          {/* upvote, downvote  */}
+          <div className="flex items-center space-x-2 p-2 rounded-lg text-gray-600 font-medium">
+            <button
+              onClick={() => handleVote("upvote")}
+              className={`flex items-center hover:text-green-600 ${
+                isUpvoted ? "text-green-600" : ""
               }`}
-            />
-            <span>{post?.upvotes?.length}</span>
-            <ArrowBigDown
-              onClick={() => handleDownvote(post._id)}
-              className={`h-6 w-6 hover:text-red-600 cursor-pointer ${
-                isDownvote ? "text-red-600" : ""
-              }`}
-            />
-            <span>{post?.downvotes?.length}</span>
-          </div>
-          {/* comment */}
-          <span className="flex">
-            <Link
-              className="flex items-center"
-              href={
-                !user?.premiumAccess && post?.premium
-                  ? "/upgrade"
-                  : `/posts/${post?._id}`
-              }
+              aria-label="Upvote"
+              disabled={!hasAccess}
             >
-              <MessageCircle className="mr-1 h-4 w-4" />{" "}
-              {post?.commentCount ? post?.commentCount : 0}
-            </Link>
-          </span>
+              <ArrowBigUp className="h-6 w-6 mr-1" />
+              <span>{post?.upvotes?.length || 0}</span>
+            </button>
+            <button
+              onClick={() => handleVote("downvote")}
+              className={`flex items-center hover:text-red-600 ${
+                isDownvoted ? "text-red-600" : ""
+              }`}
+              aria-label="Downvote"
+              disabled={!hasAccess}
+            >
+              <ArrowBigDown className="h-6 w-6 mr-1" />
+              <span>{post?.downvotes?.length || 0}</span>
+            </button>
+          </div>
+          {/* comment  */}
+          <Link className="flex items-center" href={postLink}>
+            <MessageCircle className="mr-1 h-4 w-4" />
+            <span>{post?.commentCount || 0}</span>
+          </Link>
         </div>
       </CardContent>
-      <CardFooter>
+      {/* view post or upgrade to premium button */}
+      <CardFooter className="mt-auto">
         <Button variant="ghost" asChild className="w-full">
-          <Link
-            href={
-              !user?.premiumAccess && post?.premium
-                ? "/upgrade"
-                : `/posts/${post?._id}`
-            }
-          >
-            View Post
+          <Link href={postLink}>
+            {hasAccess ? (
+              "View Post"
+            ) : (
+              <>
+                <Lock className="mr-2 h-4 w-4" /> Upgrade to View
+              </>
+            )}
           </Link>
         </Button>
       </CardFooter>
     </Card>
   );
-};
-
-export default UserPostCard;
+}

@@ -90,6 +90,34 @@ const userApi = baseApi.injectEndpoints({
         };
       },
     }),
+
+    // upgrade user
+    upgradeUser: builder.mutation({
+      query: ({ paymentData, userId }) => {
+        return {
+          url: `/users/premium-access`,
+          method: "POST",
+          body: paymentData,
+        };
+      },
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "user", id: arg.userId },
+      ],
+    }),
+
+    // verified user
+    verifiedUser: builder.mutation({
+      query: ({ paymentData, userId }) => {
+        return {
+          url: `/users/user-verified`,
+          method: "POST",
+          body: paymentData,
+        };
+      },
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "user", id: arg.userId },
+      ],
+    }),
   }),
 });
 
@@ -102,4 +130,6 @@ export const {
   useDeleteUserMutation,
   useFollowUnfollowUserMutation,
   useGetUserFollowersAndFollowigsMutation,
+  useUpgradeUserMutation,
+  useVerifiedUserMutation,
 } = userApi;

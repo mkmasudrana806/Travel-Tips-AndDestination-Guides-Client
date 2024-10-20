@@ -28,6 +28,8 @@ import { searchPosts, setSortBy } from "@/redux/features/posts/filterSlice";
 import { categories } from "@/constant";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { TPost } from "@/types/postType";
+import { useCommentsCountsForAllPostsQuery } from "@/redux/features/comments/commentApi";
+import { TCommentCounts } from "@/types/commentCountsType";
 
 // ----------- feed posts container
 export default function FeedPostsContainer() {
@@ -51,6 +53,15 @@ export default function FeedPostsContainer() {
     page,
     searchTerm: debouncedSearchTerm,
     category: selectedCategory,
+  });
+
+  // passing posts id to server and get comments belong to each post
+  let postIds = [];
+  if (!isLoading && !isError && posts?.data) {
+    postIds = posts?.data.map((post: TPost) => post?._id);
+  }
+  const { data: commentsCounts } = useCommentsCountsForAllPostsQuery(postIds, {
+    skip: !postIds.length,
   });
 
   useEffect(() => {
@@ -96,16 +107,27 @@ export default function FeedPostsContainer() {
     setPage((prevPage) => prevPage + 1);
   };
 
+  // push comment counts for all posts
+  const postsData = allPosts?.map((post: TPost) => {
+    const commentData = commentsCounts?.data?.find(
+      (c: TCommentCounts) => c._id === post._id
+    );
+    return {
+      ...post,
+      commentCount: commentData?.count,
+    };
+  });
+
   // decide what to render
   let content = null;
   if (isLoading) {
     content = <Loading />;
   } else if (isError) {
     content = <ErrorComponent />;
-  } else if (allPosts?.length === 0) {
+  } else if (postsData?.length === 0) {
     content = <DataNotFound />;
   } else {
-    content = allPosts?.map((post) => <PostCard key={post._id} post={post} />);
+    content = postsData?.map((post) => <PostCard key={post._id} post={post} />);
   }
 
   return (

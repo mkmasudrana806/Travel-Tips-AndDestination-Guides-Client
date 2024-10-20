@@ -17,14 +17,19 @@ import UserPostCard from "./UserPostCard";
 
 export default function UserProfilePage({ id }: { id: string }) {
   // Fetch user profile with RTK Query
-  const { data: user = { data: {} } } = useGetUserProfileQuery(id, {
-    skip: !id,
-  });
+  const { data: user = { data: {} }, isLoading: userLoading } =
+    useGetUserProfileQuery(id, {
+      skip: !id,
+    });
   // Mutation to send followers and followings
   const [getUserFollowersAndFollowigs] =
     useGetUserFollowersAndFollowigsMutation();
   // fetch user posts
-  const { data: userPosts = { data: [] } } = useGetUserPostsQuery(id, {
+  const {
+    data: userPosts = { data: [] },
+    isLoading: postsLoading,
+    refetch,
+  } = useGetUserPostsQuery(id, {
     skip: !id,
   });
 
@@ -50,6 +55,10 @@ export default function UserProfilePage({ id }: { id: string }) {
     getUserFollowersAndFollowigs,
   ]);
 
+  if (userLoading || postsLoading) {
+    return <div>Loading...</div>; // Show loading state
+  }
+
   return (
     <div className="container mx-auto py-8">
       {/* user profile information  */}
@@ -67,7 +76,7 @@ export default function UserProfilePage({ id }: { id: string }) {
         <TabsContent value="posts">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {userPosts?.data?.map((post: TPost) => (
-              <UserPostCard key={post?._id} post={post} />
+              <UserPostCard refetch={refetch} key={post?._id} post={post} />
             ))}
             {!userPosts?.data?.length && (
               <h1 className="text-2xl text-green-6000  ">No Posts</h1>

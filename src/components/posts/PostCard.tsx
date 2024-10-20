@@ -109,6 +109,7 @@ export default function PostCard({ post }: Props) {
       {/* upvote downvote readmore and comment */}
       <CardFooter className="flex justify-between mt-auto">
         <div className="flex space-x-4 text-sm text-muted-foreground">
+          {/* upvote, downvote  */}
           <div className="flex items-center space-x-2 p-2 rounded-lg text-gray-600 font-medium">
             <ArrowBigUp
               onClick={() => handleVote("upvote")}
@@ -125,6 +126,7 @@ export default function PostCard({ post }: Props) {
             />
             <span>{post?.downvotes?.length}</span>
           </div>
+          {/* comment  */}
           <span className="flex">
             <Link className="flex items-center" href={postLink}>
               <MessageCircle className="mr-1 h-4 w-4" />{" "}

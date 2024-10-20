@@ -24,6 +24,7 @@ type Props = {
 };
 
 export default function PostCard({ post }: Props) {
+  console.log(post?.commentCount);
   // ------------- redux
   const user = useAppSelector((state) => state.auth.token);
   const [upvotePost] = useUpvotePostMutation();
