@@ -36,15 +36,19 @@ import {
 import { useGetUserPaymentsQuery } from "@/redux/features/payments/paymentApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TPayment } from "@/types/paymentType";
+import Loading from "@/components/message/Loading";
 
 // --------------- payment management component
 const PaymentManagement = () => {
   // -------------- redux
   const userId = useAppSelector((state) => state.auth.user?.userId);
 
-  const { data: payments = { data: [] } } = useGetUserPaymentsQuery(userId, {
-    skip: !userId,
-  });
+  const { data: payments = { data: [] }, isLoading } = useGetUserPaymentsQuery(
+    userId,
+    {
+      skip: !userId,
+    }
+  );
 
   // --------------- react
   const [searchTerm, setSearchTerm] = useState("");
@@ -139,71 +143,76 @@ const PaymentManagement = () => {
                 <TableHead className="text-right font-bold">Actions</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
-              {currentPayments.map((payment: TPayment) => (
-                <TableRow
-                  key={payment?._id}
-                  className="border-b border-gray-200 dark:border-gray-700"
-                >
-                  <TableCell className="font-medium">
-                    {payment?.transactionId}
-                  </TableCell>
-                  <TableCell>{payment?.username}</TableCell>
-                  <TableCell>${payment?.amount?.toFixed(2)}</TableCell>
-                  <TableCell>
-                    {new Date(payment?.date).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        payment?.status === "completed"
-                          ? "default"
-                          : payment?.status === "pending"
-                          ? "secondary"
-                          : "destructive"
-                      }
-                    >
-                      {payment?.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{payment?.subscriptionType}</TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Open menu</span>
-                          <ChevronDown className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        {payment?.status === "completed" && (
+            {/* table body  */}
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <TableBody>
+                {currentPayments.map((payment: TPayment) => (
+                  <TableRow
+                    key={payment?._id}
+                    className="border-b border-gray-200 dark:border-gray-700"
+                  >
+                    <TableCell className="font-medium">
+                      {payment?.transactionId}
+                    </TableCell>
+                    <TableCell>{payment?.username}</TableCell>
+                    <TableCell>${payment?.amount?.toFixed(2)}</TableCell>
+                    <TableCell>
+                      {new Date(payment?.date).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          payment?.status === "completed"
+                            ? "default"
+                            : payment?.status === "pending"
+                            ? "secondary"
+                            : "destructive"
+                        }
+                      >
+                        {payment?.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{payment?.subscriptionType}</TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          {payment?.status === "completed" && (
+                            <DropdownMenuItem
+                              onClick={() => handleRefund(payment?._id)}
+                            >
+                              <ArrowUpDown className="mr-2 h-4 w-4" />
+                              <span>Refund</span>
+                            </DropdownMenuItem>
+                          )}
                           <DropdownMenuItem
-                            onClick={() => handleRefund(payment?._id)}
+                            onClick={() => handleViewInvoice(payment?._id)}
                           >
-                            <ArrowUpDown className="mr-2 h-4 w-4" />
-                            <span>Refund</span>
+                            <FileText className="mr-2 h-4 w-4" />
+                            <span>View Invoice</span>
                           </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem
-                          onClick={() => handleViewInvoice(payment?._id)}
-                        >
-                          <FileText className="mr-2 h-4 w-4" />
-                          <span>View Invoice</span>
-                        </DropdownMenuItem>
-                        {payment?.status === "failed" && (
-                          <DropdownMenuItem
-                            onClick={() => handleRetry(payment?._id)}
-                          >
-                            <RefreshCcw className="mr-2 h-4 w-4" />
-                            <span>Retry Payment</span>
-                          </DropdownMenuItem>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+                          {payment?.status === "failed" && (
+                            <DropdownMenuItem
+                              onClick={() => handleRetry(payment?._id)}
+                            >
+                              <RefreshCcw className="mr-2 h-4 w-4" />
+                              <span>Retry Payment</span>
+                            </DropdownMenuItem>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            )}
           </Table>
         </div>
         {/* pagination  */}

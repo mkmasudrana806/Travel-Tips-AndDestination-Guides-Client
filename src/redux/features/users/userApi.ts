@@ -12,6 +12,16 @@ const userApi = baseApi.injectEndpoints({
       providesTags: (result) => [{ type: "user", id: result?.data?._id }],
     }),
 
+    // ----------- get current user
+    getMyProfile: builder.query({
+      query: () => {
+        return {
+          url: `/users/getMe`,
+        };
+      },
+      providesTags: (result) => [{ type: "user", id: result?.data?._id }],
+    }),
+
     // get all users
     getAllUsers: builder.query({
       query: () => {
@@ -123,6 +133,7 @@ const userApi = baseApi.injectEndpoints({
 
 export const {
   useGetUserProfileQuery,
+  useGetMyProfileQuery,
   useGetAllUsersQuery,
   useToggleUserStatusMutation,
   useToggleUserRoleMutation,

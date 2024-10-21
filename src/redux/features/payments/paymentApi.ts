@@ -40,7 +40,6 @@ const paymentApi = baseApi.injectEndpoints({
             params.append(key, others[key].toString());
           }
         });
-
         return { url: `/payments?${params.toString()}` };
       },
       providesTags: ["payments"],

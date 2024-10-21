@@ -22,45 +22,21 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { MapPin, Mail, Phone, Cake, User } from "lucide-react";
+import { useGetMyProfileQuery } from "@/redux/features/users/userApi";
+import Loading from "@/components/message/Loading";
+import { TUser } from "@/types/userType";
+import ErrorComponent from "@/components/message/ErrorComponent";
 
-type TUser = {
-  name: string;
-  email: string;
-  password: string;
-  passwordChangedAt?: Date;
-  age: number;
-  gender: "male" | "female" | "others";
-  contact: string;
-  address: string;
-  role: "user" | "admin";
-  status: "active" | "blocked";
-  profilePicture?: string;
-  isVerified?: boolean;
-  premiumAccess?: boolean;
-  followers?: string[];
-  following?: string[];
-  isDeleted: boolean;
-};
-
-// Mock user data for demonstration
-const mockUser: TUser = {
-  name: "Amelia Earhart",
-  email: "amelia@flyinghigh.com",
-  password: "********",
-  age: 39,
-  gender: "female",
-  contact: "+1234567890",
-  address: "123 Aviation Blvd, Atchison, KS 66002",
-  role: "user",
-  status: "active",
-  profilePicture: "https://i.imgur.com/7D7I6dI.png",
-  isVerified: true,
-  premiumAccess: true,
-  isDeleted: false,
-};
-
+// ----------- profile page component
 const ProfilePage = () => {
-  const [user, setUser] = useState<TUser>(mockUser);
+  // --------------- redux
+  const {
+    data: user = { data: {} },
+    isLoading,
+    isError,
+  } = useGetMyProfileQuery(undefined);
+
+  // --------------- react
   const [editedUser, setEditedUser] = useState<TUser>(user);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -99,6 +75,11 @@ const ProfilePage = () => {
     }
   };
 
+  if (isLoading && !isError) {
+    return <Loading />;
+  } else if (isError) {
+    <ErrorComponent />;
+  }
   return (
     <div className="container mx-auto">
       <Card className="  mx-auto overflow-hidden">
@@ -106,26 +87,30 @@ const ProfilePage = () => {
           <div className="md:w-1/3 bg-gradient-to-br from-purple-600 to-blue-500 p-6 text-white">
             <div className="text-center">
               <Avatar className="w-32 h-32 mx-auto mb-4 border-4 border-white">
-                <AvatarImage src={user.profilePicture} alt={user.name} />
-                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                <AvatarImage
+                  src={user?.data?.profilePicture}
+                  alt={user?.data?.name}
+                />
+                <AvatarFallback>{user?.data?.name?.charAt(0)}</AvatarFallback>
               </Avatar>
-              <h2 className="text-2xl font-bold mb-2">{user.name}</h2>
+              <h2 className="text-2xl font-bold mb-2">{user?.data?.name}</h2>
               <p className="text-sm opacity-75">
-                {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                {user?.data?.role.charAt(0).toUpperCase() +
+                  user?.data?.role.slice(1)}
               </p>
             </div>
             <div className="mt-6 space-y-4">
               <div className="flex items-center">
                 <MapPin className="w-5 h-5 mr-2" />
-                <span className="text-sm">{user.address}</span>
+                <span className="text-sm">{user?.data?.address}</span>
               </div>
               <div className="flex items-center">
                 <Mail className="w-5 h-5 mr-2" />
-                <span className="text-sm">{user.email}</span>
+                <span className="text-sm">{user?.data?.email}</span>
               </div>
               <div className="flex items-center">
                 <Phone className="w-5 h-5 mr-2" />
-                <span className="text-sm">{user.contact}</span>
+                <span className="text-sm">{user?.data?.contact}</span>
               </div>
             </div>
           </div>
@@ -225,32 +210,44 @@ const ProfilePage = () => {
             <div className="space-y-4">
               <div className="flex items-center">
                 <Cake className="w-5 h-5 mr-2 text-gray-500" />
-                <span className="text-sm">Age: {user.age}</span>
+                <span className="text-sm">Age: {user?.data?.age}</span>
               </div>
               <div className="flex items-center">
                 <User className="w-5 h-5 mr-2 text-gray-500" />
                 <span className="text-sm">
                   Gender:{" "}
-                  {user.gender.charAt(0).toUpperCase() + user.gender.slice(1)}
+                  {user?.data?.gender.charAt(0).toUpperCase() +
+                    user?.data?.gender.slice(1)}
                 </span>
               </div>
               <div className="flex items-center space-x-2">
                 <div
                   className={`w-3 h-3 rounded-full ${
-                    user.status === "active" ? "bg-green-500" : "bg-red-500"
+                    user?.data?.status === "active"
+                      ? "bg-green-500"
+                      : "bg-red-500"
                   }`}
                 ></div>
                 <span className="text-sm">
                   Status:{" "}
-                  {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                  {user?.data?.status.charAt(0).toUpperCase() +
+                    user?.data?.status.slice(1)}
                 </span>
               </div>
               <div className="flex items-center space-x-2">
-                <Switch id="premium" checked={user.premiumAccess} disabled />
+                <Switch
+                  id="premium"
+                  checked={user?.data?.premiumAccess}
+                  disabled
+                />
                 <Label htmlFor="premium">Premium Access</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <Switch id="verified" checked={user.isVerified} disabled />
+                <Switch
+                  id="verified"
+                  checked={user?.data?.isVerified}
+                  disabled
+                />
                 <Label htmlFor="verified">Verified User</Label>
               </div>
             </div>

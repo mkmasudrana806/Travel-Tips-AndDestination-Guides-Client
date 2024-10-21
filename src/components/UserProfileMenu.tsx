@@ -52,12 +52,6 @@ const UserProfileMenu = () => {
           Profile
         </Link>
         <Link
-          href="/settings"
-          className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
-        >
-          Settings
-        </Link>
-        <Link
           href="/notifications"
           className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
         >

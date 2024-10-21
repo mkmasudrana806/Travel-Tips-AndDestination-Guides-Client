@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import {
   Card,
@@ -16,10 +14,12 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
+import ProfilePage from "./ProfilePage";
+import ChangePasswordForm from "./ChangePasswordForm";
 
-const AccountSettings = () => {
+// ---------------- account settings component
+const AccountSettingsPage = () => {
   const [user, setUser] = useState({
     name: "Jane Traveler",
     email: "jane@example.com",
@@ -40,17 +40,12 @@ const AccountSettings = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successMessage, setSuccessMessage] = useState("");
 
-  const handleProfileChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setPasswords((prev) => ({ ...prev, [name]: value }));
-  };
+  // const handleProfileChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  // ) => {
+  //   const { name, value } = e.target;
+  //   setUser((prev) => ({ ...prev, [name]: value }));
+  // };
 
   const handleNotificationChange = (
     key: "emailNotifications" | "pushNotifications"
@@ -118,6 +113,7 @@ const AccountSettings = () => {
     <div className="container mx-auto  ">
       <h1 className="text-4xl font-bold mb-8">Account Settings</h1>
 
+      {/* account settings tabs Profile, Password and Notifications */}
       <Tabs defaultValue="profile" className="space-y-4">
         <TabsList>
           <TabsTrigger value="profile">Profile</TabsTrigger>
@@ -125,8 +121,10 @@ const AccountSettings = () => {
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
         </TabsList>
 
+        {/* profile  */}
         <TabsContent value="profile">
-          <Card>
+          <ProfilePage />
+          {/* <Card>
             <CardHeader>
               <CardTitle>Profile Information</CardTitle>
               <CardDescription>
@@ -183,73 +181,15 @@ const AccountSettings = () => {
                 <Button type="submit">Update Profile</Button>
               </form>
             </CardContent>
-          </Card>
+          </Card> */}
         </TabsContent>
 
+        {/* password  */}
         <TabsContent value="password">
-          <Card>
-            <CardHeader>
-              <CardTitle>Change Password</CardTitle>
-              <CardDescription>
-                Ensure your account is using a strong password.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form
-                onSubmit={(e) => handleSubmit(e, "password")}
-                className="space-y-4"
-              >
-                <div className="space-y-2">
-                  <Label htmlFor="currentPassword">Current Password</Label>
-                  <Input
-                    id="currentPassword"
-                    name="currentPassword"
-                    type="password"
-                    value={passwords.currentPassword}
-                    onChange={handlePasswordChange}
-                  />
-                  {errors.currentPassword && (
-                    <p className="text-sm text-destructive">
-                      {errors.currentPassword}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="newPassword">New Password</Label>
-                  <Input
-                    id="newPassword"
-                    name="newPassword"
-                    type="password"
-                    value={passwords.newPassword}
-                    onChange={handlePasswordChange}
-                  />
-                  {errors.newPassword && (
-                    <p className="text-sm text-destructive">
-                      {errors.newPassword}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                  <Input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    value={passwords.confirmPassword}
-                    onChange={handlePasswordChange}
-                  />
-                  {errors.confirmPassword && (
-                    <p className="text-sm text-destructive">
-                      {errors.confirmPassword}
-                    </p>
-                  )}
-                </div>
-                <Button type="submit">Change Password</Button>
-              </form>
-            </CardContent>
-          </Card>
+          <ChangePasswordForm />
         </TabsContent>
 
+        {/* notifications  */}
         <TabsContent value="notifications">
           <Card>
             <CardHeader>
@@ -327,4 +267,4 @@ const AccountSettings = () => {
   );
 };
 
-export default AccountSettings;
+export default AccountSettingsPage;

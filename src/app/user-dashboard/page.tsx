@@ -7,8 +7,7 @@ import { Menu } from "lucide-react";
 import DashboardOverview from "@/components/dashboard/user/DashboardOverview";
 import PaymentManagement from "../../components/dashboard/user/PaymentManagement";
 import TravelBlog from "../../components/dashboard/user/TravelBlog";
-import ProfilePage from "../../components/dashboard/user/ProfilePage";
-import AccountSettings from "@/components/dashboard/user/AccountSettings";
+import AccountSettings from "@/components/dashboard/user/AccountSettingsPage";
 import SidebarItems from "@/components/dashboard/user/SidebarItems";
 
 // ------- user dashboard main layout
@@ -18,6 +17,7 @@ const UserDashboard = () => {
   // ------------ react
   const [activeTab, setActiveTab] = useState("overview");
 
+  // ------------ render nav items content
   const renderContent = () => {
     switch (activeTab) {
       case "overview":
@@ -26,8 +26,6 @@ const UserDashboard = () => {
         return <TravelBlog />;
       case "payments history":
         return <PaymentManagement />;
-      case "profile":
-        return <ProfilePage />;
       case "settings":
         return <AccountSettings />;
       default:

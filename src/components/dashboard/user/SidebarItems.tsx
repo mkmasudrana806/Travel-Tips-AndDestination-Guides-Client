@@ -1,15 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import {
-  CreditCard,
-  Home,
-  LogOut,
-  Newspaper,
-  Settings,
-  User,
-} from "lucide-react";
+import { logout } from "@/redux/features/auth/authSlice";
+import { CreditCard, Home, LogOut, Newspaper, Settings } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
+import { useDispatch } from "react-redux";
 
 type Props = {
   activeTab: string;
@@ -17,12 +14,22 @@ type Props = {
 };
 // ----------------- user dashboard sidebar items component
 const SidebarItems: React.FC<Props> = ({ activeTab, setActiveTab }) => {
+  // --------------- redux
+  const dispatch = useDispatch();
+
+  // react
+  const router = useRouter();
+  // --------------- handle logout
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/");
+  };
+
   // sidebar items
   const sidebarItems = [
     { id: "overview", label: "Overview", icon: Home },
     { id: "posts", label: "Posts", icon: Newspaper },
     { id: "payments history", label: "Payments History", icon: CreditCard },
-    { id: "profile", label: "Profile", icon: User },
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
@@ -41,10 +48,13 @@ const SidebarItems: React.FC<Props> = ({ activeTab, setActiveTab }) => {
           </Button>
         ))}
         <Separator className="my-4" />
-        <Button className="w-[100%]" variant="outline">
-          Upgrade now
-        </Button>
+        <Link href={"/upgrade"}>
+          <Button className="w-[100%] mt-2" variant="outline">
+            Upgrade now
+          </Button>
+        </Link>
         <Button
+          onClick={handleLogout}
           variant="ghost"
           className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-100"
         >
