@@ -70,6 +70,7 @@ const baseApi = createApi({
     "payments",
     "payment",
     "user-payments",
+    "credentials",
   ],
   endpoints: () => ({}),
 });

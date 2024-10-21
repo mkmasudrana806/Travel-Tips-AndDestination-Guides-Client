@@ -12,6 +12,7 @@ import { TCommentCounts } from "@/types/commentCountsType";
 import Loading from "../message/Loading";
 import ErrorComponent from "../message/ErrorComponent";
 import DataNotFound from "../message/DataNotFound";
+import { useGetMyProfileQuery } from "@/redux/features/users/userApi";
 const PremiumPostsContainer = () => {
   // -------------- redux
   const user = useAppSelector((state) => state?.auth?.user);
@@ -20,6 +21,7 @@ const PremiumPostsContainer = () => {
     isLoading: isPostLoading,
     isError,
   } = useLoadAllPostsQuery({ premium: true });
+  const { data: userData = { data: {} } } = useGetMyProfileQuery(undefined);
 
   let postIds = [];
   if (!isPostLoading && !isError && posts?.data) {
@@ -65,7 +67,7 @@ const PremiumPostsContainer = () => {
   return (
     <div className="container mx-auto ">
       {/* show upgrade premium notification popup  */}
-      {!user?.premiumAccess && (
+      {!userData?.data?.premiumAccess && (
         <Alert variant="default" className="mb-8">
           <Star className="h-4 w-4" />
           <AlertTitle>Unlock Premium Content</AlertTitle>
@@ -85,7 +87,7 @@ const PremiumPostsContainer = () => {
       </div>
 
       {/* premium updgrae box  */}
-      {!user?.premiumAccess && (
+      {!userData?.data?.premiumAccess && (
         <div className="mt-12 text-center">
           <h2 className="text-2xl font-bold mb-4">
             Ready to Elevate Your Travel Experience?

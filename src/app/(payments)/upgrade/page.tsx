@@ -67,16 +67,10 @@ const UserUpgrade = () => {
         amount: selected.price,
         subscriptionType: selected.type,
       };
-
       // api call to payment
       const result = await upgradeUser({ paymentData, userId }).unwrap();
       if (result.success) {
         window.location.href = result?.data?.payment_url;
-      }
-      try {
-        // const result = await
-      } catch (error) {
-        console.error(error);
       }
     }
   };

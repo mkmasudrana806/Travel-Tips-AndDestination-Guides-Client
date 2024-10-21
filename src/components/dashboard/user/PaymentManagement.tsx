@@ -11,12 +11,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -27,10 +27,10 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import {
-  ArrowUpDown,
-  ChevronDown,
-  FileText,
-  RefreshCcw,
+  // ArrowUpDown,
+  // ChevronDown,
+  // FileText,
+  // RefreshCcw,
   Search,
 } from "lucide-react";
 import { useGetUserPaymentsQuery } from "@/redux/features/payments/paymentApi";
@@ -83,20 +83,21 @@ const PaymentManagement = () => {
 
   const totalPages = Math.ceil(filteredPayments.length / paymentsPerPage);
 
-  // -------------- handle refund
-  const handleRefund = (id: string) => {
-    console.log(`Refund payment with id: ${id}`);
-  };
+  // TODO: implement this actions for each payment
+  // // -------------- handle refund
+  // const handleRefund = (id: string) => {
+  //   console.log(`Refund payment with id: ${id}`);
+  // };
 
-  // ---------------- handle view into invoice
-  const handleViewInvoice = (id: string) => {
-    console.log(`View invoice for payment with id: ${id}`);
-  };
+  // // ---------------- handle view into invoice
+  // const handleViewInvoice = (id: string) => {
+  //   console.log(`View invoice for payment with id: ${id}`);
+  // };
 
-  // --------------- handle retry payment
-  const handleRetry = (id: string) => {
-    console.log(`Retry payment with id: ${id}`);
-  };
+  // // --------------- handle retry payment
+  // const handleRetry = (id: string) => {
+  //   console.log(`Retry payment with id: ${id}`);
+  // };
 
   return (
     <Card className="w-full bg-white dark:bg-gray-800 shadow-lg">
@@ -140,7 +141,7 @@ const PaymentManagement = () => {
                 <TableHead className="font-bold">Date</TableHead>
                 <TableHead className="font-bold">Status</TableHead>
                 <TableHead className="font-bold">Type</TableHead>
-                <TableHead className="text-right font-bold">Actions</TableHead>
+                {/* <TableHead className="text-right font-bold">Actions</TableHead> */}
               </TableRow>
             </TableHeader>
             {/* table body  */}
@@ -175,7 +176,8 @@ const PaymentManagement = () => {
                       </Badge>
                     </TableCell>
                     <TableCell>{payment?.subscriptionType}</TableCell>
-                    <TableCell className="text-right">
+                    {/* actions */}
+                    {/* <TableCell className="text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -208,7 +210,7 @@ const PaymentManagement = () => {
                           )}
                         </DropdownMenuContent>
                       </DropdownMenu>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 ))}
               </TableBody>

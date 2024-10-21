@@ -124,7 +124,7 @@ export default function RegisterPage() {
         throw new Error(result?.error?.data?.message);
       }
     } catch (error: any) {
-      console.log(error);
+ 
       setErrors({ form: error?.message });
     } finally {
       setIsLoading(false);

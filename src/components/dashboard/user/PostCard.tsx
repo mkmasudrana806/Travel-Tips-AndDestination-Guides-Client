@@ -45,7 +45,6 @@ const PostCard: React.FC<Props> = ({ post, refetch }) => {
     try {
       const result = await deletePost(postId).unwrap();
       if (result?.success) {
-        console.log(result.message);
         refetch();
       }
     } catch (error) {

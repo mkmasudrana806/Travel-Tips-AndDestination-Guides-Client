@@ -23,8 +23,7 @@ type Props = {
   post: TPost;
 };
 
-export default function PostCard({ post }: Props) {
-  console.log(post?.commentCount);
+const PostCard = ({ post }: Props) => {
   // ------------- redux
   const user = useAppSelector((state) => state.auth.token);
   const [upvotePost] = useUpvotePostMutation();
@@ -129,4 +128,6 @@ export default function PostCard({ post }: Props) {
       </CardFooter>
     </Card>
   );
-}
+};
+
+export default PostCard;

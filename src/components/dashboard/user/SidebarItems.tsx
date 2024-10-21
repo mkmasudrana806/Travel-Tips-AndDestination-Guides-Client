@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { logout } from "@/redux/features/auth/authSlice";
+import { useGetMyProfileQuery } from "@/redux/features/users/userApi";
 import { CreditCard, Home, LogOut, Newspaper, Settings } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,6 +17,7 @@ type Props = {
 const SidebarItems: React.FC<Props> = ({ activeTab, setActiveTab }) => {
   // --------------- redux
   const dispatch = useDispatch();
+  const { data: user = { data: {} } } = useGetMyProfileQuery(undefined);
 
   // react
   const router = useRouter();
@@ -48,11 +50,15 @@ const SidebarItems: React.FC<Props> = ({ activeTab, setActiveTab }) => {
           </Button>
         ))}
         <Separator className="my-4" />
-        <Link href={"/upgrade"}>
-          <Button className="w-[100%] mt-2" variant="outline">
-            Upgrade now
-          </Button>
-        </Link>
+
+        {!user?.data?.premiumAccess && (
+          <Link href={"/upgrade"}>
+            <Button className="w-[100%] mt-2" variant="outline">
+              Upgrade now
+            </Button>
+          </Link>
+        )}
+
         <Button
           onClick={handleLogout}
           variant="ghost"

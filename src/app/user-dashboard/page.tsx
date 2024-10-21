@@ -9,10 +9,9 @@ import PaymentManagement from "../../components/dashboard/user/PaymentManagement
 import TravelBlog from "../../components/dashboard/user/TravelBlog";
 import AccountSettings from "@/components/dashboard/user/AccountSettingsPage";
 import SidebarItems from "@/components/dashboard/user/SidebarItems";
-
+ 
 // ------- user dashboard main layout
 const UserDashboard = () => {
-  // ----------- redux
 
   // ------------ react
   const [activeTab, setActiveTab] = useState("overview");

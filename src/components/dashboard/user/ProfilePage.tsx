@@ -64,10 +64,8 @@ const ProfilePage = () => {
       const formData = new FormData();
       try {
         formData.append("file", selectedFile);
-
-        const result = await updateUserProfilePicture(formData);
-        console.log("result after profile update: ", result);
-      } catch (error) {
+         await updateUserProfilePicture(formData);
+       } catch (error) {
         console.log(error);
       }
     }

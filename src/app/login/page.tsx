@@ -78,11 +78,11 @@ export default function LoginPage() {
           router.push("/");
         }, 1000);
       } else {
-        console.log("throw error");
+        
         throw new Error(result?.error?.data?.message);
       }
     } catch (error: any) {
-      console.log("eror: ", error);
+  
       setErrors({
         form: error?.message,
       });

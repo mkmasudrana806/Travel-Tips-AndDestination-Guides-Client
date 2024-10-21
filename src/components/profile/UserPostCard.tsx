@@ -18,6 +18,7 @@ import {
   useUpvotePostMutation,
 } from "@/redux/features/posts/postApi";
 import { useRouter } from "next/navigation";
+import { useGetMyProfileQuery } from "@/redux/features/users/userApi";
 
 type Props = {
   refetch: () => void;
@@ -29,13 +30,16 @@ export default function UserPostCard({ refetch, post }: Props) {
   const user = useAppSelector((state) => state.auth?.user);
   const [upvotePost] = useUpvotePostMutation();
   const [downvotePost] = useDownVotePostMutation();
+  const { data: userData = { data: {} } } = useGetMyProfileQuery(undefined);
+
   const router = useRouter();
 
   // ------------ react
   const isUpvoted = post?.upvotes?.includes(user?.userId as string);
   const isDownvoted = post?.downvotes?.includes(user?.userId as string);
   const isPostOwner = user?.userId === post?.author?._id;
-  const hasAccess = !post.premium || user?.premiumAccess || isPostOwner;
+  const hasAccess =
+    !post.premium || userData?.data?.premiumAccess || isPostOwner;
 
   // ------------------ handle upvote and downvote
   const handleVote = async (voteType: "upvote" | "downvote") => {
