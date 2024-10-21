@@ -67,6 +67,9 @@ const baseApi = createApi({
     "comment",
     "users",
     "user",
+    "payments",
+    "payment",
+    "user-payments",
   ],
   endpoints: () => ({}),
 });

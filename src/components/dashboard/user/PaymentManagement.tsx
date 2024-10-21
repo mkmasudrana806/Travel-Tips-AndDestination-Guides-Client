@@ -29,76 +29,43 @@ import { Badge } from "@/components/ui/badge";
 import {
   ArrowUpDown,
   ChevronDown,
-  DollarSign,
   FileText,
   RefreshCcw,
   Search,
 } from "lucide-react";
+import { useGetUserPaymentsQuery } from "@/redux/features/payments/paymentApi";
+import { useAppSelector } from "@/redux/hooks";
+import { TPayment } from "@/types/paymentType";
 
-// Mock data for payments
-const mockPayments = [
-  {
-    id: "PAY001",
-    user: "Jane Doe",
-    amount: 99.99,
-    date: "2023-06-15",
-    status: "Completed",
-    type: "Subscription",
-  },
-  {
-    id: "PAY002",
-    user: "John Smith",
-    amount: 49.99,
-    date: "2023-06-14",
-    status: "Pending",
-    type: "One-time",
-  },
-  {
-    id: "PAY003",
-    user: "Alice Johnson",
-    amount: 149.99,
-    date: "2023-06-13",
-    status: "Completed",
-    type: "Subscription",
-  },
-  {
-    id: "PAY004",
-    user: "Bob Wilson",
-    amount: 29.99,
-    date: "2023-06-12",
-    status: "Failed",
-    type: "One-time",
-  },
-  {
-    id: "PAY005",
-    user: "Emma Brown",
-    amount: 199.99,
-    date: "2023-06-11",
-    status: "Completed",
-    type: "Subscription",
-  },
-];
+// --------------- payment management component
+const PaymentManagement = () => {
+  // -------------- redux
+  const userId = useAppSelector((state) => state.auth.user?.userId);
 
-export default function PaymentManagement() {
+  const { data: payments = { data: [] } } = useGetUserPaymentsQuery(userId, {
+    skip: !userId,
+  });
+
+  // --------------- react
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("date");
   const [currentPage, setCurrentPage] = useState(1);
   const paymentsPerPage = 5;
 
   // Filter and sort payments
-  const filteredPayments = mockPayments
-    .filter(
-      (payment) =>
-        payment.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.id.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPayments = payments?.data
+    ?.filter(
+      (payment: TPayment) =>
+        payment?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment?.status?.toLowerCase().includes(searchTerm.toLowerCase())
     )
-    .sort((a, b) => {
+    .sort((a: TPayment, b: TPayment) => {
       if (sortBy === "date") {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
       } else if (sortBy === "amount") {
         return b.amount - a.amount;
       } else {
-        return a.user.localeCompare(b.user);
+        return a.username.localeCompare(b.username);
       }
     });
 
@@ -112,14 +79,17 @@ export default function PaymentManagement() {
 
   const totalPages = Math.ceil(filteredPayments.length / paymentsPerPage);
 
+  // -------------- handle refund
   const handleRefund = (id: string) => {
     console.log(`Refund payment with id: ${id}`);
   };
 
+  // ---------------- handle view into invoice
   const handleViewInvoice = (id: string) => {
     console.log(`View invoice for payment with id: ${id}`);
   };
 
+  // --------------- handle retry payment
   const handleRetry = (id: string) => {
     console.log(`Retry payment with id: ${id}`);
   };
@@ -155,6 +125,7 @@ export default function PaymentManagement() {
             </SelectContent>
           </Select>
         </div>
+        {/* payment table  */}
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
@@ -169,31 +140,33 @@ export default function PaymentManagement() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentPayments.map((payment) => (
+              {currentPayments.map((payment: TPayment) => (
                 <TableRow
-                  key={payment.id}
+                  key={payment?._id}
                   className="border-b border-gray-200 dark:border-gray-700"
                 >
-                  <TableCell className="font-medium">{payment.id}</TableCell>
-                  <TableCell>{payment.user}</TableCell>
-                  <TableCell>${payment.amount.toFixed(2)}</TableCell>
+                  <TableCell className="font-medium">
+                    {payment?.transactionId}
+                  </TableCell>
+                  <TableCell>{payment?.username}</TableCell>
+                  <TableCell>${payment?.amount?.toFixed(2)}</TableCell>
                   <TableCell>
-                    {new Date(payment.date).toLocaleDateString()}
+                    {new Date(payment?.date).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
                     <Badge
                       variant={
-                        payment.status === "Completed"
+                        payment?.status === "completed"
                           ? "default"
-                          : payment.status === "Pending"
+                          : payment?.status === "pending"
                           ? "secondary"
                           : "destructive"
                       }
                     >
-                      {payment.status}
+                      {payment?.status}
                     </Badge>
                   </TableCell>
-                  <TableCell>{payment.type}</TableCell>
+                  <TableCell>{payment?.subscriptionType}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -203,23 +176,23 @@ export default function PaymentManagement() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        {payment.status === "Completed" && (
+                        {payment?.status === "completed" && (
                           <DropdownMenuItem
-                            onClick={() => handleRefund(payment.id)}
+                            onClick={() => handleRefund(payment?._id)}
                           >
                             <ArrowUpDown className="mr-2 h-4 w-4" />
                             <span>Refund</span>
                           </DropdownMenuItem>
                         )}
                         <DropdownMenuItem
-                          onClick={() => handleViewInvoice(payment.id)}
+                          onClick={() => handleViewInvoice(payment?._id)}
                         >
                           <FileText className="mr-2 h-4 w-4" />
                           <span>View Invoice</span>
                         </DropdownMenuItem>
-                        {payment.status === "Failed" && (
+                        {payment?.status === "failed" && (
                           <DropdownMenuItem
-                            onClick={() => handleRetry(payment.id)}
+                            onClick={() => handleRetry(payment?._id)}
                           >
                             <RefreshCcw className="mr-2 h-4 w-4" />
                             <span>Retry Payment</span>
@@ -233,6 +206,7 @@ export default function PaymentManagement() {
             </TableBody>
           </Table>
         </div>
+        {/* pagination  */}
         <div className="flex items-center justify-between space-x-2 py-4">
           <div className="text-sm text-gray-500 dark:text-gray-400">
             Showing {indexOfFirstPayment + 1}-
@@ -263,4 +237,6 @@ export default function PaymentManagement() {
       </CardContent>
     </Card>
   );
-}
+};
+
+export default PaymentManagement;
