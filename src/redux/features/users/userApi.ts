@@ -12,7 +12,7 @@ const userApi = baseApi.injectEndpoints({
       providesTags: (result) => [{ type: "user", id: result?.data?._id }],
     }),
 
-    // ----------- get current user
+    // ----------- get my profile
     getMyProfile: builder.query({
       query: () => {
         return {
@@ -20,6 +20,20 @@ const userApi = baseApi.injectEndpoints({
         };
       },
       providesTags: (result) => [{ type: "user", id: result?.data?._id }],
+    }),
+
+    // update user profile
+    updateUserProfilePicture: builder.mutation({
+      query: (file) => {
+        return {
+          url: `/users/update-profile-picture`,
+          method: "PATCH",
+          body: file,
+        };
+      },
+      invalidatesTags: (result, error, arg) => [
+        { type: "user", id: result?.data?._id },
+      ],
     }),
 
     // get all users
@@ -67,15 +81,15 @@ const userApi = baseApi.injectEndpoints({
 
     // ---------- update single user
     updateUser: builder.mutation({
-      query: ({ updatedUserData, userId }) => {
+      query: (updatedUserData) => {
         return {
-          url: `/users/${userId}`,
+          url: `/users/update-profile`,
           method: "PATCH",
           body: updatedUserData,
         };
       },
-      invalidatesTags: (_result, _error, arg) => [
-        { type: "user", id: arg.userId },
+      invalidatesTags: (result, error, arg) => [
+        { type: "user", id: result?.data?._id },
       ],
     }),
 
@@ -135,6 +149,7 @@ export const {
   useGetUserProfileQuery,
   useGetMyProfileQuery,
   useGetAllUsersQuery,
+  useUpdateUserProfilePictureMutation,
   useToggleUserStatusMutation,
   useToggleUserRoleMutation,
   useUpdateUserMutation,
