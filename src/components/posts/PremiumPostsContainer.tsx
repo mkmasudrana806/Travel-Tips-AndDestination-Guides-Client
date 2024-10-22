@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Star } from "lucide-react";
-import { useAppSelector } from "@/redux/hooks";
 import { useLoadAllPostsQuery } from "@/redux/features/posts/postApi";
 import { TPost } from "@/types/postType";
 import PremiumPostCard from "./PostCard";
@@ -13,9 +12,10 @@ import Loading from "../message/Loading";
 import ErrorComponent from "../message/ErrorComponent";
 import DataNotFound from "../message/DataNotFound";
 import { useGetMyProfileQuery } from "@/redux/features/users/userApi";
+
+// ------------ premium post container
 const PremiumPostsContainer = () => {
   // -------------- redux
-  const user = useAppSelector((state) => state?.auth?.user);
   const {
     data: posts,
     isLoading: isPostLoading,

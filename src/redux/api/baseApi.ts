@@ -71,6 +71,9 @@ const baseApi = createApi({
     "payment",
     "user-payments",
     "credentials",
+    "admin-insights",
+    "user-insights",
+    "monthly-overview",
   ],
   endpoints: () => ({}),
 });

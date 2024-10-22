@@ -44,6 +44,7 @@ const AccountSettingsPage = () => {
         [key]: !prev.notificationPreferences[key],
       },
     }));
+    setErrors({});
   };
 
   return (

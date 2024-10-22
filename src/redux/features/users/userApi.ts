@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import baseApi from "@/redux/api/baseApi";
 
 const userApi = baseApi.injectEndpoints({

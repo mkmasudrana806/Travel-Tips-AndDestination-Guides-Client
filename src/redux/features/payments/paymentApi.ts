@@ -47,7 +47,7 @@ const paymentApi = baseApi.injectEndpoints({
 
     // --------- get user payments
     getUserPayments: builder.query({
-      query: (userId) => {
+      query: () => {
         return { url: `/payments/my-payments-history` };
       },
       providesTags: (_result, _error, arg) => [
