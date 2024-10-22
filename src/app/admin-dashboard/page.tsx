@@ -4,11 +4,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
-import PaymentManagement from "../../components/dashboard/user/PaymentManagement";
-import TravelBlog from "../../components/dashboard/user/TravelBlog";
 import AccountSettings from "@/components/dashboard/user/AccountSettingsPage";
-import SidebarItems from "@/components/dashboard/user/SidebarItems";
 import AdminDashboardOverview from "@/components/dashboard/admin/AdminDashboardOverview";
+import PostManagement from "@/components/dashboard/admin/PostManagement";
+import UserManagement from "@/components/dashboard/admin/UserManagement";
+import SidebarItems from "@/components/dashboard/admin/SidebarItems";
+import PaymentManagement from "@/components/dashboard/admin/PaymentManagement";
 
 // ------- admin dashboard
 const AdminDashboard = () => {
@@ -21,7 +22,9 @@ const AdminDashboard = () => {
       case "overview":
         return <AdminDashboardOverview />;
       case "posts":
-        return <TravelBlog />;
+        return <PostManagement />;
+      case "users":
+        return <UserManagement />;
       case "payments history":
         return <PaymentManagement />;
       case "settings":

@@ -77,7 +77,7 @@ const userApi = baseApi.injectEndpoints({
         url: `/users/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_result, _error, arg) => [{ type: "user", id: arg.id }],
+      invalidatesTags: (_result, _error, arg) => [{ type: "user", id: arg }],
     }),
 
     // ---------- update single user
