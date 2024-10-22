@@ -11,7 +11,7 @@ import { logout, setUser } from "../features/auth/authSlice";
 
 // base query function
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/api",
+  baseUrl: "https://travel-tips-and-destination-guides-backend.vercel.app/api",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -32,10 +32,13 @@ const customBaseQueryWithRefreshToken: BaseQueryFn<
 
   // result return an object with {error or data, meta}
   if (result.error?.status === 401) {
-    const res = await fetch("http://localhost:5000/api/auth/refresh-token", {
-      method: "POST",
-      credentials: "include",
-    });
+    const res = await fetch(
+      "https://travel-tips-and-destination-guides-backend.vercel.app/api/auth/refresh-token",
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
     const { data } = await res.json();
     const token = data?.accessToken;
     // after expired access token and fetch again to refresh-token route

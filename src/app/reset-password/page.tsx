@@ -27,6 +27,7 @@ const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
+  const token = searchParams?.get("token");
   const [alert, setAlert] = useState<{
     type: "success" | "error" | null;
     message: string;
@@ -42,7 +43,7 @@ const ResetPassword = () => {
       const result = await resetPassword({
         email: email,
         newPassword: password,
-        token: searchParams?.get("token"),
+        token: token,
       }).unwrap();
 
       if (result?.success) {
