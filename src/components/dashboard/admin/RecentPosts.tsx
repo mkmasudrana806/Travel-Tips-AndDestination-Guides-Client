@@ -1,3 +1,4 @@
+import Loading from "@/components/message/Loading";
 import {
   Card,
   CardContent,
@@ -13,29 +14,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useLoadAllPostsQuery } from "@/redux/features/posts/postApi";
+import { TPost } from "@/types/postType";
 
-const recentPosts = [
-  {
-    id: 1,
-    title: "Exploring the Amazon Rainforest",
-    author: "David Explorer",
-    date: "2024-03-04",
-  },
-  {
-    id: 2,
-    title: "Top 10 Beaches in Southeast Asia",
-    author: "Emma Beachgoer",
-    date: "2024-03-05",
-  },
-  {
-    id: 3,
-    title: "A Foodies Guide to Italy",
-    author: "Frank Gourmet",
-    date: "2024-03-06",
-  },
-];
-
+// ---------------- recent posts component
 const RecentPosts = () => {
+  // ------------ redux
+  const { data: posts = { data: [] }, isLoading } = useLoadAllPostsQuery({
+    limit: 5,
+  });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+  
   return (
     <Card>
       <CardHeader>
@@ -49,14 +41,18 @@ const RecentPosts = () => {
               <TableHead>Title</TableHead>
               <TableHead>Author</TableHead>
               <TableHead>Date</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Type</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {recentPosts.map((post) => (
-              <TableRow key={post.id}>
-                <TableCell>{post.title}</TableCell>
-                <TableCell>{post.author}</TableCell>
-                <TableCell>{post.date}</TableCell>
+            {posts?.data?.slice(0, 5)?.map((post: TPost) => (
+              <TableRow key={post?._id}>
+                <TableCell>{post?.title.slice(0, 40)}</TableCell>
+                <TableCell>{post?.author?.name}</TableCell>
+                <TableCell>{post?.createdAt}</TableCell>
+                <TableCell>{post?.category}</TableCell>
+                <TableCell>{post?.premium ? "Premium" : "Free"}</TableCell>
               </TableRow>
             ))}
           </TableBody>

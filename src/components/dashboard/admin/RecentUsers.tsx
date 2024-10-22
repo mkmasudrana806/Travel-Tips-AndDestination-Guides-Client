@@ -1,3 +1,4 @@
+import Loading from "@/components/message/Loading";
 import {
   Card,
   CardContent,
@@ -13,29 +14,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-const recentUsers = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    email: "alice@example.com",
-    joinDate: "2024-03-01",
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    email: "bob@example.com",
-    joinDate: "2024-03-02",
-  },
-  {
-    id: 3,
-    name: "Charlie Brown",
-    email: "charlie@example.com",
-    joinDate: "2024-03-03",
-  },
-];
+import { useGetAllUsersQuery } from "@/redux/features/users/userApi";
+import { TUser } from "@/types/userType";
 
 const RecentUsers = () => {
+  // ---------------- redux
+  const { data: users = { data: [] }, isLoading } = useGetAllUsersQuery({
+    limit: 5,
+  });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -48,15 +39,20 @@ const RecentUsers = () => {
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Gender</TableHead>
               <TableHead>Join Date</TableHead>
+              <TableHead>Address</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
-            {recentUsers.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.joinDate}</TableCell>
+            {users?.data?.map((user: TUser) => (
+              <TableRow key={user?._id}>
+                <TableCell>{user?.name}</TableCell>
+                <TableCell>{user?.email}</TableCell>
+                <TableCell>{user?.gender}</TableCell>
+                <TableCell>{user?.createdAt}</TableCell>
+                <TableCell>{user?.address}</TableCell>
               </TableRow>
             ))}
           </TableBody>
