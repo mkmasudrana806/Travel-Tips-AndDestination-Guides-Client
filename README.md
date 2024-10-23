@@ -23,9 +23,10 @@ Travel Tips & Destination Guides is a comprehensive web application that combine
 ## Features
 
 - **User Dashboard**: Personalized dashboard for managing trips, profile, and user preferences.
-- **Interactive Maps**: Explore destinations with detailed, interactive maps highlighting points of interest.
+- **Admin Dashboard**: Well and comprehensive dashboard with insights and manageable all task seamlessly
+- **Custom Authentication**: Custom authentication with login, register, change and forgot password, Reset password link
 - **Customizable Profiles**: Create and customize your traveler profile.
-- **Travel Tips**: Access a wealth of travel tips, from packing hacks to local customs and etiquette.
+- **Travel Posts**: Post you travel story using vast editor.
 - **Responsive Design**: Enjoy a seamless experience across desktop, tablet, and mobile devices.
 
 ## Technology Stack
@@ -68,8 +69,6 @@ Our project leverages a modern and robust technology stack to deliver a high-per
 
 To get the project up and running locally, follow these steps:
 
-`Note:` before running the application, please include .env file root of your project. below is given instructions of it.
-
 1. **Clone the repository:**
 
 ```bash
@@ -106,11 +105,3 @@ const baseQuery = fetchBaseQuery({
 });
 ```
 
-## Environment Variables
-
-Create a .env.local file in the root of the project and add your variables:
-
-```bash
-VITE_APP_STRIPE_PUBLISHABLE_KEY=pk_test_ add your strie publishable key
-VITE_APP_STRIPE_SECRET_KEY=sk_test_ add your stripe secret key
-```
