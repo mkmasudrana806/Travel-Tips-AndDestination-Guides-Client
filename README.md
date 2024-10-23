@@ -4,7 +4,7 @@
 
 1. **Live Deployment Link :**
 
-- [Live Server]([https://car-washing-system-client-gilt.vercel.app](https://travel-tips-and-destination-guides-client.vercel.app/))
+- [Live Server](https://travel-tips-and-destination-guides-client.vercel.app)
 
 2. **GitHub Repository Link :**
 
@@ -72,7 +72,7 @@ To get the project up and running locally, follow these steps:
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/mkmasudrana806/Car-Washing-System-Client.git
+git clone https://github.com/mkmasudrana806/Travel-Tips-AndDestination-Guides-Client.git
 cd Car-Washing-System-Client
 ```
 
