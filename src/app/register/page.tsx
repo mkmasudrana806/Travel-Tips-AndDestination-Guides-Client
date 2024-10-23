@@ -25,7 +25,9 @@ import {
 } from "@/components/ui/select";
 import { useRegisterUserMutation } from "@/redux/features/auth/authApi";
 
-export default function RegisterPage() {
+
+// --------------- register page
+const RegisterPage = () => {
   // ---------- redux
   const [registerUser] = useRegisterUserMutation();
   // ----------- react ------------------------------
@@ -124,7 +126,6 @@ export default function RegisterPage() {
         throw new Error(result?.error?.data?.message);
       }
     } catch (error: any) {
- 
       setErrors({ form: error?.message });
     } finally {
       setIsLoading(false);
@@ -295,4 +296,6 @@ export default function RegisterPage() {
       </Card>
     </div>
   );
-}
+};
+
+export default RegisterPage;

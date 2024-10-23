@@ -62,6 +62,8 @@ const initialNotifications = [
   },
 ];
 
+
+// ------------- notifications page
 const Notifications = () => {
   const [notifications, setNotifications] = useState(initialNotifications);
   const [notificationPreferences, setNotificationPreferences] = useState({

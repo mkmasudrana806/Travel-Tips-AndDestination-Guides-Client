@@ -29,5 +29,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/user/:path*", "/admin/:path*"], // Define the routes to match for middleware
+  matcher: ["/user-dashboard", "/admin-dashboard"], // Define the routes to match for middleware
 };

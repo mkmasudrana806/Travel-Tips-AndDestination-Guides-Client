@@ -22,8 +22,9 @@ import { TUser } from "@/types/userType";
 import { useAppDispatch } from "@/redux/hooks";
 import { setUser } from "@/redux/features/auth/authSlice";
 
+
 // ------------- login page  --------------------
-export default function LoginPage() {
+const LoginPage = () => {
   // ----------- redux
   const dispatch = useAppDispatch();
   const [login] = useLoginMutation();
@@ -78,11 +79,9 @@ export default function LoginPage() {
           router.push("/");
         }, 1000);
       } else {
-        
         throw new Error(result?.error?.data?.message);
       }
     } catch (error: any) {
-  
       setErrors({
         form: error?.message,
       });
@@ -170,4 +169,6 @@ export default function LoginPage() {
       </Card>
     </div>
   );
-}
+};
+
+export default LoginPage;

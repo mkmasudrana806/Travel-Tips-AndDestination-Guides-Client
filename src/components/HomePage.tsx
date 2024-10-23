@@ -14,8 +14,8 @@ export default async function HomePage() {
         <Image
           src="https://www.thenexttrip.xyz/wp-content/uploads/2024/07/Canyonlands-National-Park-Uta-1536x864.jpg"
           alt="Travel destination"
-          layout="fill"
-          objectFit="cover"
+          fill
+          style={{ objectFit: "cover" }}
           className="absolute inset-0"
         />
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>

@@ -1,6 +1,14 @@
 import Image from "next/image";
 import React from "react";
 
+// meta data
+export const metadata = {
+  title: "Travel Tips And Destination Guides | Unauthorized",
+  description:
+    "Travel Tips And Destination Guides, Unauthorized page show for unauthorized users access unappropiate content they don't belong to it",
+};
+
+// ---------------- unauthorized page
 const page = () => {
   return (
     <div className="flex justify-center items-center">

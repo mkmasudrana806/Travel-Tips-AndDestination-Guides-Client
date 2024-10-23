@@ -3,7 +3,9 @@ import PremiumPostsContainer from "@/components/posts/PremiumPostsContainer";
 import TravelMap from "@/components/TravelMaps";
 import TravelTrends from "@/components/TravelTrends";
 
-export default function ExplorePage() {
+
+// ----------- explore page
+const ExplorePage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       {/* featured destination  */}
@@ -31,4 +33,6 @@ export default function ExplorePage() {
       </section>
     </div>
   );
-}
+};
+
+export default ExplorePage;

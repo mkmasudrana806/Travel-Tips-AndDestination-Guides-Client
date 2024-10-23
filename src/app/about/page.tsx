@@ -11,7 +11,15 @@ import { Globe, Users, Compass, Award } from "lucide-react";
 import { teamMembers } from "@/constant";
 import Link from "next/link";
 
-export default function AboutPage() {
+// meta data
+export const metadata = {
+  title: "Travel Tips And Destination Guides | About Us",
+  description:
+    "Travel Tips And Destination Guides About Us page give you clear instruction about us",
+};
+
+// ----------------- about us page
+const AboutPage = () => {
   return (
     <div className="container mx-auto py-12">
       {/* about travel tips and guide  */}
@@ -151,4 +159,6 @@ export default function AboutPage() {
       </section>
     </div>
   );
-}
+};
+
+export default AboutPage;
