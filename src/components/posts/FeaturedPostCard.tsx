@@ -5,7 +5,7 @@ import {
   useDownVotePostMutation,
   useUpvotePostMutation,
 } from "@/redux/features/posts/postApi";
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 import { MessageCircle, ArrowBigUp, ArrowBigDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

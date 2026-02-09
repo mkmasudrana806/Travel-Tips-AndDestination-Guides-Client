@@ -8,8 +8,8 @@ import CreatePostModal from "@/components/posts/CreatePostModal";
 import { useAppSelector } from "@/redux/hooks";
 import { useGetUserPostsQuery } from "@/redux/features/posts/postApi";
 import { useCommentsCountsForAllPostsQuery } from "@/redux/features/comments/commentApi";
-import { TPost } from "@/types/postType";
-import { TCommentCounts } from "@/types/commentCountsType";
+import { TPost } from "@/types/TPost";
+import { TCommentCounts } from "@/types/TCommentCounts";
 import PostCard from "./PostCard";
 
 // -------------- posts management page
@@ -39,7 +39,7 @@ const TravelBlog = () => {
   // push comment counts for all posts
   const postsData = posts?.data?.map((post: TPost) => {
     const commentData = commentsCounts?.data?.find(
-      (c: TCommentCounts) => c._id === post._id
+      (c: TCommentCounts) => c._id === post._id,
     );
     return {
       ...post,
@@ -49,7 +49,7 @@ const TravelBlog = () => {
 
   // make categories lists daynamically based on data
   const categories = Array.from(
-    new Set(posts?.data.map((post: any) => post?.category))
+    new Set(posts?.data.map((post: any) => post?.category)),
   );
 
   return (

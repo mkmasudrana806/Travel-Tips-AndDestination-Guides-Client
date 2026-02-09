@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Star } from "lucide-react";
 import { useLoadAllPostsQuery } from "@/redux/features/posts/postApi";
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 import PremiumPostCard from "./PostCard";
 import { useCommentsCountsForAllPostsQuery } from "@/redux/features/comments/commentApi";
-import { TCommentCounts } from "@/types/commentCountsType";
+import { TCommentCounts } from "@/types/TCommentCounts";
 import Loading from "../message/Loading";
 import ErrorComponent from "../message/ErrorComponent";
 import DataNotFound from "../message/DataNotFound";
@@ -34,7 +34,7 @@ const PremiumPostsContainer = () => {
   // push comment counts for all posts
   const postsData = posts?.data?.map((post: TPost) => {
     const commentData = commentsCounts?.data?.find(
-      (c: TCommentCounts) => c._id === post._id
+      (c: TCommentCounts) => c._id === post._id,
     );
     return {
       ...post,

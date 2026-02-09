@@ -19,10 +19,10 @@ import {
   useGetPostByIdQuery,
   useUpvotePostMutation,
 } from "@/redux/features/posts/postApi";
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 import { useAppSelector } from "@/redux/hooks";
 import { useLoadCommentsOfPostQuery } from "@/redux/features/comments/commentApi";
-import { TComment } from "@/types/commentType";
+import { TComment } from "@/types/TComment";
 import CommentForm from "./CommentForm";
 import CommentCard from "./CommentCard";
 import Link from "next/link";

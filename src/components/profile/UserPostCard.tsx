@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { MessageCircle, ArrowBigDown, ArrowBigUp, Lock } from "lucide-react";
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 import { useAppSelector } from "@/redux/hooks";
 import {
   useDownVotePostMutation,

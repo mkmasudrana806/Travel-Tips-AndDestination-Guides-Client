@@ -15,7 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { TComment } from "@/types/commentType";
+import { TComment } from "@/types/TComment";
 import { useDispatch } from "react-redux";
 import { setEditCommentData } from "@/redux/features/comments/commentsSlice";
 import {
@@ -53,7 +53,7 @@ const CommentCard: React.FC<Props> = ({ postOwnerId, comment }) => {
         _id: comment?._id,
         postId: comment?.postId,
         comment: comment?.comment,
-      })
+      }),
     );
     setIsModalOpen(true);
   };

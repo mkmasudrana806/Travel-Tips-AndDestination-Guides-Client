@@ -20,3 +20,13 @@ export type TPost = {
   createdAt: string;
   updatedAt: string;
 };
+
+// Define this in your postApi.ts or a separate types file
+export interface PostQueryArgs {
+  searchTerm?: string;
+  sort?: string;
+  limit?: number;
+  page?: number;
+  premium?: boolean;
+  [key: string]: any;
+}

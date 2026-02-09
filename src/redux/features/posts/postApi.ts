@@ -1,4 +1,6 @@
+import { TApiResponse } from "@/types/TApiResponse";
 import baseApi from "../../api/baseApi";
+import { PostQueryArgs, TPost } from "@/types/TPost";
 
 const postApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -15,33 +17,16 @@ const postApi = baseApi.injectEndpoints({
     }),
 
     // --------- load all post
-    loadAllPosts: builder.query({
-      query: ({ searchTerm, sort, limit, page, ...others }) => {
+    loadAllPosts: builder.query<TApiResponse<TPost[]>, PostQueryArgs>({
+      query: (args) => {
         const params = new URLSearchParams();
-        // Search term
-        if (searchTerm) {
-          params.append("searchTerm", searchTerm);
-        }
-        // Sorting
-        if (sort) {
-          params.append("sort", sort);
-        }
-        // Pagination
-        if (limit) {
-          params.append("limit", limit.toString());
-        }
-        if (page) {
-          params.append("page", page.toString());
-        }
-
-        // Handle dynamic properties in "others"
-        Object.keys(others).forEach((key) => {
-          if (others[key] && others[key] !== "default") {
-            params.append(key, others[key].toString());
+        Object.entries(args).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== "default") {
+            params.append(key, value.toString());
           }
         });
 
-        return { url: `/posts?${params.toString()}` };
+        return { url: "/posts", params };
       },
       providesTags: ["posts"],
     }),

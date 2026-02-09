@@ -38,7 +38,7 @@ import {
   useDeletePostMutation,
   useLoadAllPostsQuery,
 } from "@/redux/features/posts/postApi";
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 import Link from "next/link";
 
 const PostManagement = () => {
@@ -61,7 +61,7 @@ const PostManagement = () => {
   // Filter and sort posts
   const filteredPosts = posts?.data
     ?.filter((post: TPost) =>
-      post.title.toLowerCase().includes(searchTerm.toLowerCase())
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()),
     )
     .sort((a: TPost, b: TPost) => {
       if (sortBy === "name") {

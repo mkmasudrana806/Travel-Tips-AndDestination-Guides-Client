@@ -1,4 +1,4 @@
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface FilterState {

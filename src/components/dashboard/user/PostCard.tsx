@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 import {
   ArrowBigDown,
   ArrowBigUp,

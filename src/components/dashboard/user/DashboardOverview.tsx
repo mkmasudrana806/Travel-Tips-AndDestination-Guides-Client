@@ -18,9 +18,9 @@ import {
 import { useAppSelector } from "@/redux/hooks";
 import { useGetUserPostsQuery } from "@/redux/features/posts/postApi";
 import { useGetUserProfileQuery } from "@/redux/features/users/userApi";
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 import { useCommentsCountsForAllPostsQuery } from "@/redux/features/comments/commentApi";
-import { TCommentCounts } from "@/types/commentCountsType";
+import { TCommentCounts } from "@/types/TCommentCounts";
 import Link from "next/link";
 
 const DashboardOverview = () => {
@@ -65,7 +65,7 @@ const DashboardOverview = () => {
   // push comment counts for all posts
   const postsData = posts?.data?.map((post: TPost) => {
     const commentData = commentsCounts?.data?.find(
-      (c: TCommentCounts) => c._id === post._id
+      (c: TCommentCounts) => c._id === post._id,
     );
     return {
       ...post,
@@ -76,7 +76,9 @@ const DashboardOverview = () => {
   return (
     <div className="container mx-auto">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold">Welcome back, {userProfile?.data?.name}!</h1>
+        <h1 className="text-3xl font-bold">
+          Welcome back, {userProfile?.data?.name}!
+        </h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* total posts  */}

@@ -11,7 +11,8 @@ import { logout, setUser } from "../features/auth/authSlice";
 
 // base query function
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://travel-tips-and-destination-guides-backend.vercel.app/api",
+  // baseUrl: "https://travel-tips-and-destination-guides-backend.vercel.app/api",
+  baseUrl: "http://localhost:5000/api/v1",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -33,11 +34,12 @@ const customBaseQueryWithRefreshToken: BaseQueryFn<
   // result return an object with {error or data, meta}
   if (result.error?.status === 401) {
     const res = await fetch(
-      "https://travel-tips-and-destination-guides-backend.vercel.app/api/auth/refresh-token",
+      // "https://travel-tips-and-destination-guides-backend.vercel.app/api/auth/refresh-token",
+      "http://localhost:5000/api/v1/auth/refresh-token",
       {
         method: "POST",
         credentials: "include",
-      }
+      },
     );
     const { data } = await res.json();
     const token = data?.accessToken;

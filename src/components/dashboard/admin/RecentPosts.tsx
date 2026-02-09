@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useLoadAllPostsQuery } from "@/redux/features/posts/postApi";
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 
 // ---------------- recent posts component
 const RecentPosts = () => {
@@ -27,7 +27,7 @@ const RecentPosts = () => {
   if (isLoading) {
     return <Loading />;
   }
-  
+
   return (
     <Card>
       <CardHeader>

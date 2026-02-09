@@ -27,9 +27,9 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { searchPosts, setSortBy } from "@/redux/features/posts/filterSlice";
 import { categories } from "@/constant";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 import { useCommentsCountsForAllPostsQuery } from "@/redux/features/comments/commentApi";
-import { TCommentCounts } from "@/types/commentCountsType";
+import { TCommentCounts } from "@/types/TCommentCounts";
 
 // ----------- feed posts container
 export default function FeedPostsContainer() {
@@ -37,7 +37,7 @@ export default function FeedPostsContainer() {
   const dispatch = useAppDispatch();
   const [selectedCategory, setSelectedCategory] = useState("");
   const { searchTerm, sortBy, limit } = useAppSelector(
-    (state) => state.filters
+    (state) => state.filters,
   );
   const [page, setPage] = useState(1); // Track current page
   const [allPosts, setAllPosts] = useState<TPost[]>([]); // Maintain all fetched posts
@@ -110,7 +110,7 @@ export default function FeedPostsContainer() {
   // push comment counts for all posts
   const postsData = allPosts?.map((post: TPost) => {
     const commentData = commentsCounts?.data?.find(
-      (c: TCommentCounts) => c._id === post._id
+      (c: TCommentCounts) => c._id === post._id,
     );
     return {
       ...post,
@@ -169,7 +169,7 @@ export default function FeedPostsContainer() {
                       <SelectItem key={category?.value} value={category?.value}>
                         {category?.value}
                       </SelectItem>
-                    )
+                    ),
                   )}
                 </SelectContent>
               </Select>

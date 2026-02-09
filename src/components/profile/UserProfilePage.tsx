@@ -12,7 +12,7 @@ import {
   useGetUserProfileQuery,
 } from "@/redux/features/users/userApi";
 import { useGetUserPostsQuery } from "@/redux/features/posts/postApi";
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 import UserPostCard from "./UserPostCard";
 
 export default function UserProfilePage({ id }: { id: string }) {

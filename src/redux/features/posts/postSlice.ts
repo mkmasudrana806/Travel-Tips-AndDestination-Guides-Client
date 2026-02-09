@@ -1,4 +1,4 @@
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 import { createSlice } from "@reduxjs/toolkit";
 
 // type
@@ -65,13 +65,13 @@ const postsSlice = createSlice({
       const post = action.payload;
       // Check if the post is already in the compare list
       const isPostInCompare = state.compareList.some(
-        (item) => item._id === post._id
+        (item) => item._id === post._id,
       );
 
       if (isPostInCompare) {
         // If post is in the compare list, remove it
         state.compareList = state.compareList.filter(
-          (item) => item._id !== post._id
+          (item) => item._id !== post._id,
         );
       } else if (state.compareList.length < 3) {
         state.compareList.push(post);

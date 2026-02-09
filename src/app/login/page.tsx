@@ -21,15 +21,13 @@ import verifyToken from "@/utils/verifyToken";
 import { TUser } from "@/types/userType";
 import { useAppDispatch } from "@/redux/hooks";
 import { setUser } from "@/redux/features/auth/authSlice";
-
-
-// ------------- login page  --------------------
+// ------------- login page --------------------
 const LoginPage = () => {
   // ----------- redux
   const dispatch = useAppDispatch();
   const [login] = useLoginMutation();
-
   // ---------- react
+
   const [formData, setFormData] = useState({
     email: "masud@gmail.com",
     password: "masud",
@@ -38,18 +36,19 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const router = useRouter();
-
   // ----------- handle change input ----------------
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Clear error when user starts typing
+
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
-
   // ----------------- validation form
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.email.trim()) newErrors.email = "Email is required";
@@ -59,8 +58,8 @@ const LoginPage = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   // handle submit form
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -70,10 +69,9 @@ const LoginPage = () => {
       if (result?.data?.success) {
         const user = verifyToken(result?.data?.data?.accessToken) as TUser;
         dispatch(setUser({ user, token: result?.data?.data?.accessToken }));
-
         // Set a persistent cookie for user role, expires in 1 year
+        //
         setCookie("role", user.role, { maxAge: 60 * 60 * 24 * 365, path: "/" });
-
         setSuccessMessage("Login successful! Redirecting to previous page...");
         setTimeout(() => {
           router.push("/");
@@ -82,27 +80,31 @@ const LoginPage = () => {
         throw new Error(result?.error?.data?.message);
       }
     } catch (error: any) {
-      setErrors({
-        form: error?.message,
-      });
+      setErrors({ form: error?.message });
     } finally {
       setIsLoading(false);
     }
   };
-
   return (
     <div className="container max-w-md mx-auto mt-8">
+      {" "}
       <Card>
+        {" "}
         <CardHeader>
-          <CardTitle>Log In</CardTitle>
+          {" "}
+          <CardTitle>Log In</CardTitle>{" "}
           <CardDescription>
-            Welcome back! Please log in to your account.
-          </CardDescription>
-        </CardHeader>
+            {" "}
+            Welcome back! Please log in to your account.{" "}
+          </CardDescription>{" "}
+        </CardHeader>{" "}
         <CardContent>
+          {" "}
           <form onSubmit={handleSubmit} className="space-y-4">
+            {" "}
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              {" "}
+              <Label htmlFor="email">Email</Label>{" "}
               <Input
                 id="email"
                 name="email"
@@ -111,13 +113,14 @@ const LoginPage = () => {
                 value={formData.email}
                 onChange={handleChange}
                 aria-invalid={!!errors.email}
-              />
+              />{" "}
               {errors.email && (
                 <p className="text-sm text-destructive">{errors.email}</p>
-              )}
-            </div>
+              )}{" "}
+            </div>{" "}
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              {" "}
+              <Label htmlFor="password">Password</Label>{" "}
               <Input
                 id="password"
                 name="password"
@@ -125,50 +128,56 @@ const LoginPage = () => {
                 value={formData.password}
                 onChange={handleChange}
                 aria-invalid={!!errors.password}
-              />
+              />{" "}
               {errors.password && (
                 <p className="text-sm text-destructive">{errors.password}</p>
-              )}
-            </div>
+              )}{" "}
+            </div>{" "}
             {errors.form && (
               <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{errors.form}</AlertDescription>
+                {" "}
+                <AlertCircle className="h-4 w-4" />{" "}
+                <AlertTitle>Error</AlertTitle>{" "}
+                <AlertDescription>{errors.form}</AlertDescription>{" "}
               </Alert>
-            )}
+            )}{" "}
             {successMessage && (
               <Alert
                 variant="default"
                 className="bg-green-50 text-green-800 border-green-300"
               >
-                <CheckCircle2 className="h-4 w-4" />
-                <AlertTitle>Success</AlertTitle>
-                <AlertDescription>{successMessage}</AlertDescription>
+                {" "}
+                <CheckCircle2 className="h-4 w-4" />{" "}
+                <AlertTitle>Success</AlertTitle>{" "}
+                <AlertDescription>{successMessage}</AlertDescription>{" "}
               </Alert>
-            )}
+            )}{" "}
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Logging in..." : "Log In"}
-            </Button>
-          </form>
-        </CardContent>
+              {" "}
+              {isLoading ? "Logging in..." : "Log In"}{" "}
+            </Button>{" "}
+          </form>{" "}
+        </CardContent>{" "}
         <CardFooter className="flex flex-col space-y-2">
+          {" "}
           <p className="text-sm text-muted-foreground">
+            {" "}
             Do not have an account?{" "}
             <Link href="/register" className="text-primary hover:underline">
-              Sign up
-            </Link>
-          </p>
+              {" "}
+              Sign up{" "}
+            </Link>{" "}
+          </p>{" "}
           <Link
             href="/forgot-password"
             className="text-sm text-primary hover:underline"
           >
-            Forgot your password?
-          </Link>
-        </CardFooter>
-      </Card>
+            {" "}
+            Forgot your password?{" "}
+          </Link>{" "}
+        </CardFooter>{" "}
+      </Card>{" "}
     </div>
   );
 };
-
 export default LoginPage;

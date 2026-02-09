@@ -8,7 +8,7 @@ export function middleware(req: NextRequest) {
   const userRole = req.cookies.get("role")?.value || "guest";
   console.log("user role: ", userRole);
 
-  // Example: Restrict routes starting with /user/* for users with role !== 'user'
+  // Restrict routes starting with /user/* for users with role !== 'user'
   if (pathname.startsWith("/user")) {
     if (userRole !== "user") {
       // Redirect to unauthorized page if role isn't user
@@ -16,9 +16,17 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // Example: Restrict routes starting with /admin/* for users with role !== 'admin'
+  // Restrict routes starting with /admin/* for users with role !== 'admin'
   if (pathname.startsWith("/admin")) {
     if (userRole !== "admin") {
+      // Redirect to unauthorized page if role isn't admin
+      return NextResponse.redirect(new URL("/unauthorized", req.url));
+    }
+  }
+
+  // Restrict routes starting with /vendor/* for users with role !== 'venodr'
+  if (pathname.startsWith("/vendor")) {
+    if (userRole !== "vendor") {
       // Redirect to unauthorized page if role isn't admin
       return NextResponse.redirect(new URL("/unauthorized", req.url));
     }
@@ -29,5 +37,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/user-dashboard", "/admin-dashboard"], // Define the routes to match for middleware
+  matcher: ["/user-dashboard", "/admin-dashboard", "/vendor-dashboard"], // Define the routes to match for middleware
 };

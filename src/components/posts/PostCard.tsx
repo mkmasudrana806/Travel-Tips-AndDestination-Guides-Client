@@ -1,4 +1,4 @@
-import { TPost } from "@/types/postType";
+import { TPost } from "@/types/TPost";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
