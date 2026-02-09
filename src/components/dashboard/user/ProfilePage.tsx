@@ -19,7 +19,7 @@ import {
   useUpdateUserProfilePictureMutation,
 } from "@/redux/features/users/userApi";
 import Loading from "@/components/message/Loading";
-import { TUser } from "@/types/userType";
+import { TUser } from "@/types/TUser";
 import ErrorComponent from "@/components/message/ErrorComponent";
 import { useAppDispatch } from "@/redux/hooks";
 import { setEditUserData } from "@/redux/features/users/userSlice";
@@ -56,7 +56,7 @@ const ProfilePage = () => {
 
   // handle file selection
   const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -64,8 +64,8 @@ const ProfilePage = () => {
       const formData = new FormData();
       try {
         formData.append("file", selectedFile);
-         await updateUserProfilePicture(formData);
-       } catch (error) {
+        await updateUserProfilePicture(formData);
+      } catch (error) {
         console.log(error);
       }
     }

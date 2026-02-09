@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { TUser } from "@/types/userType";
+import { TUser } from "@/types/TUser";
 import { useAppSelector } from "@/redux/hooks";
 import { useUpdateUserMutation } from "@/redux/features/users/userApi";
 

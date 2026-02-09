@@ -18,7 +18,7 @@ import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
 import verifyToken from "@/utils/verifyToken";
-import { TUser } from "@/types/userType";
+import { TUser } from "@/types/TUser";
 import { useAppDispatch } from "@/redux/hooks";
 import { setUser } from "@/redux/features/auth/authSlice";
 // ------------- login page --------------------

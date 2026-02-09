@@ -1,4 +1,4 @@
-import { TUser } from "@/types/userType";
+import { TUser } from "@/types/TUser";
 import { createSlice } from "@reduxjs/toolkit";
 
 type TProfile = {

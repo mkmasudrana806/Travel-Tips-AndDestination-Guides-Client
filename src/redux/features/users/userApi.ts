@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import baseApi from "@/redux/api/baseApi";
+import { TApiResponse } from "@/types/TApiResponse";
+import { TUser } from "@/types/TUser";
 
 const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -13,8 +15,9 @@ const userApi = baseApi.injectEndpoints({
       providesTags: (result) => [{ type: "user", id: result?.data?._id }],
     }),
 
+    
     // ----------- get my profile
-    getMyProfile: builder.query({
+    getMyProfile: builder.query<TApiResponse<TUser>, void>({
       query: () => {
         return {
           url: `/users/getMe`,

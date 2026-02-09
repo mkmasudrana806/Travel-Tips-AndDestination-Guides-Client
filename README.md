@@ -1,5 +1,9 @@
 # Travel-Tips-And-Destination-Guides
 
+# Important Note: Project is under development
+
+`Note`: You may see inconsistent in both backend and frontend UI
+
 ## Important Links
 
 1. **Live Deployment Link :**
@@ -58,7 +62,7 @@ Our project leverages a modern and robust technology stack to deliver a high-per
 - **Other Tools**:
   - ESLint (Code linting)
   - Prettier (Code formatting)
-    
+
 ## Prerequisites
 
 - Ensure `nodejs` and `typescript` installed on your machine before
@@ -104,4 +108,3 @@ const baseQuery = fetchBaseQuery({
   baseUrl: 'https://localhost:5000/api',
 });
 ```
-

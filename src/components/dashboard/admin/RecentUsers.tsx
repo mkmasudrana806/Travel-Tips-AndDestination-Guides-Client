@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetAllUsersQuery } from "@/redux/features/users/userApi";
-import { TUser } from "@/types/userType";
+import { TUser } from "@/types/TUser";
 
 const RecentUsers = () => {
   // ---------------- redux

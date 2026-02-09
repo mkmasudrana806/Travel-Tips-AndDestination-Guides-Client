@@ -3,11 +3,11 @@ import React, { useMemo } from "react";
 import FeaturedPostCard from "./FeaturedPostCard";
 import { TPost } from "@/types/TPost";
 import { useLoadAllPostsQuery } from "@/redux/features/posts/postApi";
-import Loading from "../message/Loading";
 import ErrorComponent from "../message/ErrorComponent";
 import DataNotFound from "../message/DataNotFound";
 import { useCommentsCountsForAllPostsQuery } from "@/redux/features/comments/commentApi";
 import { TCommentCounts } from "@/types/TCommentCounts";
+import { SkeletonCard } from "../skeleton/SkeletonPostCard";
 
 const TopTreavelPostsContainer = () => {
   // --------------- fetch posts ------------
@@ -22,7 +22,6 @@ const TopTreavelPostsContainer = () => {
     [posts?.data],
   );
 
-  console.log(posts);
   // ------------ fetch comments ------------
 
   const { data: commentsCounts, isLoading: isCommentLoading } =
@@ -44,15 +43,19 @@ const TopTreavelPostsContainer = () => {
     });
   }, [posts?.data, commentsCounts?.data]);
 
-  if (isPostLoading || isCommentLoading) return <Loading />;
   if (isPostError) return <ErrorComponent />;
-  if (postsData.length === 0) return <DataNotFound />;
+  if (!isPostLoading && !isCommentLoading && postsData.length === 0)
+    return <DataNotFound />;
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {postsData.map((post: TPost) => (
-        <FeaturedPostCard key={post._id} post={post} />
-      ))}
+      {isPostLoading || isCommentLoading
+        ? Array.from({ length: 3 }).map((_, index) => (
+            <SkeletonCard key={index} />
+          ))
+        : postsData.map((post: TPost) => (
+            <FeaturedPostCard key={post._id} post={post} />
+          ))}
     </div>
   );
 };

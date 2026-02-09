@@ -23,7 +23,7 @@ type Props = {
   post: TPost;
 };
 
-const PostCard = ({ post }: Props) => {
+const FeaturedPostCard = ({ post }: Props) => {
   // ------------- redux
   const user = useAppSelector((state) => state.auth.token);
   const [upvotePost] = useUpvotePostMutation();
@@ -130,4 +130,4 @@ const PostCard = ({ post }: Props) => {
   );
 };
 
-export default PostCard;
+export default FeaturedPostCard;

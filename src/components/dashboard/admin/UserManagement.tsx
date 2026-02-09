@@ -39,7 +39,7 @@ import {
   useDeleteUserMutation,
   useGetAllUsersQuery,
 } from "@/redux/features/users/userApi";
-import { TUser } from "@/types/userType";
+import { TUser } from "@/types/TUser";
 import Link from "next/link";
 
 // ------------- user management component
@@ -65,7 +65,7 @@ const UserManagement = () => {
     ?.filter(
       (user: TUser) =>
         user.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-        user.email?.toLowerCase().includes(searchTerm?.toLowerCase())
+        user.email?.toLowerCase().includes(searchTerm?.toLowerCase()),
     )
     .sort((a: TUser, b: TUser) => {
       if (sortBy === "email") {
