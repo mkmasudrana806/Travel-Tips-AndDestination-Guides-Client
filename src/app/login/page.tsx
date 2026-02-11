@@ -30,7 +30,7 @@ const LoginPage = () => {
 
   const [formData, setFormData] = useState({
     email: "masud@gmail.com",
-    password: "masud",
+    password: "123456",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -65,20 +65,16 @@ const LoginPage = () => {
     if (!validateForm()) return;
     setIsLoading(true);
     try {
-      const result: any = await login(formData);
-      if (result?.data?.success) {
-        const user = verifyToken(result?.data?.data?.accessToken) as TUser;
-        dispatch(setUser({ user, token: result?.data?.data?.accessToken }));
-        // Set a persistent cookie for user role, expires in 1 year
-        //
-        setCookie("role", user.role, { maxAge: 60 * 60 * 24 * 365, path: "/" });
-        setSuccessMessage("Login successful! Redirecting to previous page...");
-        setTimeout(() => {
-          router.push("/");
-        }, 1000);
-      } else {
-        throw new Error(result?.error?.data?.message);
-      }
+      const result = await login(formData).unwrap();
+      const user = verifyToken(result?.data?.accessToken) as TUser;
+      dispatch(setUser({ user, token: result?.data?.accessToken }));
+
+      // Set a persistent cookie for user role, expires in 1 year
+      setCookie("role", user.role, { maxAge: 60 * 60 * 24 * 365, path: "/" });
+      setSuccessMessage("Login successful! Redirecting to previous page...");
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
     } catch (error: any) {
       setErrors({ form: error?.message });
     } finally {

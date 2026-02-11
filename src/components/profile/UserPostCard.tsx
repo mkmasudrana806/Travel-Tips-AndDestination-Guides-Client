@@ -79,6 +79,7 @@ export default function UserPostCard({ refetch, post }: Props) {
           <Image
             src={post.image}
             alt={post.title}
+ 
             layout="fill"
             objectFit="cover"
             className="rounded-md"

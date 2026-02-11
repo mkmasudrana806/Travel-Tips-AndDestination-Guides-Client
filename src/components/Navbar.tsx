@@ -12,9 +12,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Bell, Menu, Search, X } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {  useAppSelector } from "@/redux/hooks";
 import UserProfileMenu from "./UserProfileMenu";
-import { logout } from "@/redux/features/auth/authSlice";
 
 const Navbar = () => {
   // redux
@@ -23,7 +22,6 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const dispatch = useAppDispatch();
 
   // Ensure that the component has mounted on the client side
   useEffect(() => {
@@ -41,11 +39,6 @@ const Navbar = () => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const userImage = user?.profilePicture || "/demo.webp";
-
-  // handle logout user
-  const handleLogout = () => {
-    dispatch(logout(undefined));
-  };
 
   return (
     <nav className="bg-background border-b">

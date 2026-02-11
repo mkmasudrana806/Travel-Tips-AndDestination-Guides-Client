@@ -1,9 +1,12 @@
+import { TApiResponse } from "@/types/TApiResponse";
 import baseApi from "../../api/baseApi";
+import { TUserLoginRes } from "@/types/TUserLoginRes";
+import { TUserLoginReq } from "@/types/TUserLoginReq";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // ----------- login an user
-    login: builder.mutation({
+    login: builder.mutation<TApiResponse<TUserLoginRes>, TUserLoginReq>({
       query: (userInfo) => ({
         url: "/auth/login",
         method: "POST",
