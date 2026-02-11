@@ -33,9 +33,12 @@ const DashboardOverview = () => {
   } = useGetUserPostsQuery(userId, {
     skip: !userId,
   });
-  const { data: userProfile = { data: {} } } = useGetUserProfileQuery(userId, {
-    skip: !userId,
-  });
+  const { data: userProfile = { data: {} } } = useGetUserProfileQuery(
+    userId as string,
+    {
+      skip: !userId,
+    },
+  );
 
   // pass posts ids to server to calculate comments of each post
   let postIds = [];

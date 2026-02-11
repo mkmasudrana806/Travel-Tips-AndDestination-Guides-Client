@@ -3,10 +3,13 @@ import baseApi from "@/redux/api/baseApi";
 import { TApiResponse } from "@/types/TApiResponse";
 import { TUser } from "@/types/TUser";
 
+type TUserId = string;
+
 const userApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
-    // ----------- get current user
-    getUserProfile: builder.query({
+    // ----------- get a user profile ------------
+    getUserProfile: builder.query<TApiResponse<TUser>, TUserId>({
       query: (userId) => {
         return {
           url: `/users/${userId}`,
@@ -15,8 +18,7 @@ const userApi = baseApi.injectEndpoints({
       providesTags: (result) => [{ type: "user", id: result?.data?._id }],
     }),
 
-    
-    // ----------- get my profile
+    // ----------- get my profile ----------
     getMyProfile: builder.query<TApiResponse<TUser>, void>({
       query: () => {
         return {
@@ -26,8 +28,8 @@ const userApi = baseApi.injectEndpoints({
       providesTags: (result) => [{ type: "user", id: result?.data?._id }],
     }),
 
-    // update user profile
-    updateUserProfilePicture: builder.mutation({
+    // ----------- update user profile -----------
+    updateUserProfilePicture: builder.mutation<TApiResponse<TUser>, FormData>({
       query: (file) => {
         return {
           url: `/users/update-profile-picture`,

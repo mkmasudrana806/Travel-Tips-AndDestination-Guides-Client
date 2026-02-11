@@ -28,11 +28,7 @@ import EditUserInfoForm from "./EditUserInfoForm";
 // ----------- profile page component
 const ProfilePage = () => {
   // --------------- redux
-  const {
-    data: user = { data: {} },
-    isLoading,
-    isError,
-  } = useGetMyProfileQuery(undefined);
+  const { data: user, isLoading, isError } = useGetMyProfileQuery(undefined);
   const dispatch = useAppDispatch();
   const [updateUserProfilePicture] = useUpdateUserProfilePictureMutation();
 
@@ -64,7 +60,7 @@ const ProfilePage = () => {
       const formData = new FormData();
       try {
         formData.append("file", selectedFile);
-        await updateUserProfilePicture(formData);
+        await updateUserProfilePicture(formData).unwrap();
       } catch (error) {
         console.log(error);
       }
@@ -103,8 +99,9 @@ const ProfilePage = () => {
               </Avatar>
               <h2 className="text-2xl font-bold mb-2">{user?.data?.name}</h2>
               <p className="text-sm opacity-75">
-                {user?.data?.role?.charAt(0).toUpperCase() +
-                  user?.data?.role?.slice(1)}
+                {user?.data?.role &&
+                  user?.data?.role?.charAt(0).toUpperCase() +
+                    user?.data?.role?.slice(1)}
               </p>
             </div>
             <div className="mt-6 space-y-4">
@@ -129,7 +126,7 @@ const ProfilePage = () => {
               {/* edit user profile modal */}
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger
-                  onClick={() => handleEditUser(user?.data)}
+                  onClick={() => user?.data && handleEditUser(user?.data)}
                   asChild
                 >
                   <Button variant="outline">Edit Profile</Button>
@@ -154,8 +151,9 @@ const ProfilePage = () => {
                 <User className="w-5 h-5 mr-2 text-gray-500" />
                 <span className="text-sm">
                   Gender:{" "}
-                  {user?.data?.gender?.charAt(0).toUpperCase() +
-                    user?.data?.gender?.slice(1)}
+                  {user?.data?.gender &&
+                    user?.data?.gender?.charAt(0).toUpperCase() +
+                      user?.data?.gender?.slice(1)}
                 </span>
               </div>
               <div className="flex items-center space-x-2">
@@ -168,8 +166,9 @@ const ProfilePage = () => {
                 ></div>
                 <span className="text-sm">
                   Status:{" "}
-                  {user?.data?.status?.charAt(0).toUpperCase() +
-                    user?.data?.status?.slice(1)}
+                  {user?.data?.status &&
+                    user.data.status.charAt(0).toUpperCase() +
+                      user.data.status.slice(1)}
                 </span>
               </div>
               <div className="flex items-center space-x-2">
