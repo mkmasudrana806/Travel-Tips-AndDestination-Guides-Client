@@ -1,11 +1,13 @@
 import { TApiResponse } from "@/types/TApiResponse";
 import baseApi from "../../api/baseApi";
 import { PostQueryArgs, TPost } from "@/types/TPost";
+import { TCreatePost } from "@/types/TCreatePost";
 
 const postApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     // ---------- create a post into db
-    createPost: builder.mutation({
+    createPost: builder.mutation<TApiResponse<TPost>, TCreatePost>({
       query: (newPost) => {
         return {
           url: `/posts/create-post`,

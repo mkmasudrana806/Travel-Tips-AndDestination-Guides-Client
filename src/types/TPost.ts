@@ -13,6 +13,8 @@ export type TPost = {
   category: string;
   image: string;
   premium: boolean;
+  bannerId: string;
+  contentIds: string[];
   upvotes: string[];
   downvotes: string[];
   commentCount: number;

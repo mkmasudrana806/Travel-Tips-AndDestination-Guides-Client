@@ -22,17 +22,13 @@ const Navbar = () => {
   const user = useAppSelector((state) => state.auth.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  const [hasMounted, setHasMounted] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const dispatch = useAppDispatch();
 
   // Ensure that the component has mounted on the client side
   useEffect(() => {
-    setHasMounted(true);
+    setMounted(true);
   }, []);
-
-  if (!hasMounted) {
-    return null;
-  }
 
   // nav items
   const navItems = [
@@ -44,19 +40,24 @@ const Navbar = () => {
   ];
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const userImage = user?.profilePicture || "/demo.webp";
 
   // handle logout user
   const handleLogout = () => {
     dispatch(logout(undefined));
   };
+
   return (
     <nav className="bg-background border-b">
       <div className="max-w-7xl mx-auto ">
         <div className="flex items-center justify-between h-16">
+          {/* Desktop navbar  */}
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0">
               <span className="text-2xl font-bold">Travel Tips</span>
             </Link>
+
+            {/* Nav items  */}
             <div className="hidden md:block ml-10">
               <div className="flex items-baseline space-x-4">
                 {navItems.map((item) => (
@@ -75,8 +76,11 @@ const Navbar = () => {
               </div>
             </div>
           </div>
+
+          {/* right side search and login/logout/avatar */}
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
+              {/* search field  */}
               <form className="relative">
                 <Input
                   type="search"
@@ -93,31 +97,35 @@ const Navbar = () => {
                 </Button>
               </form>
 
-              {/* open menu when user is logged in  */}
-              {isLoggedIn ? (
+              {/* if no mounted, show skeleton. ifloggedin show user image or avatar  */}
+              {!mounted ? (
+                // Tiny localized skeleton
+                <div className="flex items-center ms-3 space-x-2">
+                  <div className="h-7 w-7 bg-muted rounded-full animate-pulse" />
+                  <div className="h-10 w-10 bg-muted rounded-full animate-pulse" />
+                </div>
+              ) : isLoggedIn ? (
                 <>
                   <Button variant="ghost" size="icon" className="ml-2" asChild>
                     <Link href="/notifications">
                       <Bell className="h-5 w-5" />
                     </Link>
                   </Button>
-                  <Button onClick={handleLogout} className="mx-2">
-                    Log out
-                  </Button>
-                  
                   {/* user profile menu  */}
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Avatar>
+                      <Avatar className="cursor-pointer">
                         <AvatarImage
-                          src={
-                            user?.profilePicture
-                              ? user.profilePicture
-                              : "https://d22e6o9mp4t2lx.cloudfront.net/cms/pfp3_d7855f9562.webp"
-                          }
-                          alt="@shadcn"
+                          width={100}
+                          height={100}
+                          src={userImage}
+                          alt="User avater"
                         />
-                        <AvatarFallback>CN</AvatarFallback>
+                        <AvatarFallback>
+                          {user?.name
+                            ? user.name.substring(0, 2).toUpperCase()
+                            : "LP"}
+                        </AvatarFallback>
                       </Avatar>
                     </PopoverTrigger>
                     <PopoverContent className="max-w-fit p-4">
