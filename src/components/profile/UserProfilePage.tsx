@@ -14,13 +14,13 @@ import {
 import { useGetUserPostsQuery } from "@/redux/features/posts/postApi";
 import { TPost } from "@/types/TPost";
 import UserPostCard from "./UserPostCard";
+import { TUser } from "@/types/TUser";
 
 export default function UserProfilePage({ id }: { id: string }) {
   // Fetch user profile with RTK Query
-  const { data: user = { data: {} }, isLoading: userLoading } =
-    useGetUserProfileQuery(id, {
-      skip: !id,
-    });
+  const { data: user, isLoading: userLoading } = useGetUserProfileQuery(id, {
+    skip: !id,
+  });
   // Mutation to send followers and followings
   const [getUserFollowersAndFollowigs] =
     useGetUserFollowersAndFollowigsMutation();
@@ -34,23 +34,23 @@ export default function UserProfilePage({ id }: { id: string }) {
   });
 
   // followers and followings users
-  const [followers, setFollowers] = useState([]);
-  const [followings, setFollowings] = useState([]);
+  const [followers, setFollowers] = useState<Partial<TUser>[]>([]);
+  const [followings, setFollowings] = useState<Partial<TUser>[]>([]);
 
   // followers and followings data fetch
   useEffect(() => {
     const fetchFollowersFollowings = async () => {
       const result = await getUserFollowersAndFollowigs({
         followers: user?.data?.followers,
-        followings: user?.data?.followings,
-      });
-      setFollowers(result?.data?.data?.followerLists);
-      setFollowings(result?.data?.data?.followingLists);
+        followings: user?.data?.following,
+      }).unwrap();
+      setFollowers(result?.data?.followerLists);
+      setFollowings(result?.data?.followingLists);
     };
     fetchFollowersFollowings();
   }, [
     user?.data?.followers,
-    user?.data?.followings,
+    user?.data?.following,
     id,
     getUserFollowersAndFollowigs,
   ]);

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import baseApi from "@/redux/api/baseApi";
 import { TApiResponse } from "@/types/TApiResponse";
+import { TFollowersFollowing } from "@/types/TFollowersFollowing";
 import { TQueryArgs } from "@/types/TPost";
 import { TUser } from "@/types/TUser";
 
-type TUserId = string;
 type TUserStatusChanged = {
   id: string;
   status: string;
@@ -15,11 +15,16 @@ type TUserRoleChanged = {
   role: string;
 };
 
+type TFollowersFollowingReq = {
+  followers: string[] | undefined;
+  followings: string[] | undefined;
+};
+
 const userApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     // ----------- get a user profile ------------
-    getUserProfile: builder.query<TApiResponse<TUser>, TUserId>({
+    getUserProfile: builder.query<TApiResponse<TUser>, string>({
       query: (userId) => {
         return {
           url: `/users/${userId}`,
@@ -89,7 +94,7 @@ const userApi = baseApi.injectEndpoints({
     }),
 
     // ---------- delete single user
-    deleteUser: builder.mutation({
+    deleteUser: builder.mutation<TApiResponse<boolean>, string>({
       query: (id) => ({
         url: `/users/${id}`,
         method: "DELETE",
@@ -98,7 +103,7 @@ const userApi = baseApi.injectEndpoints({
     }),
 
     // ---------- update single user
-    updateUser: builder.mutation({
+    updateUser: builder.mutation<TApiResponse<TUser>, Partial<TUser>>({
       query: (updatedUserData) => {
         return {
           url: `/users/update-profile`,
@@ -112,7 +117,7 @@ const userApi = baseApi.injectEndpoints({
     }),
 
     // follow unfollow user
-    followUnfollowUser: builder.mutation({
+    followUnfollowUser: builder.mutation<TApiResponse<TUser>, string>({
       query: (targetUserId) => {
         return {
           url: `/users/follow-unfollow/${targetUserId}`,
@@ -123,7 +128,10 @@ const userApi = baseApi.injectEndpoints({
     }),
 
     // get user followersAndFollowings
-    getUserFollowersAndFollowigs: builder.mutation({
+    getUserFollowersAndFollowigs: builder.mutation<
+      TApiResponse<TFollowersFollowing>,
+      TFollowersFollowingReq
+    >({
       query: (userids) => {
         return {
           url: `/users/followers-followings`,
