@@ -24,7 +24,7 @@ export type TPost = {
 };
 
 // Define this in your postApi.ts or a separate types file
-export interface PostQueryArgs {
+export interface TQueryArgs {
   searchTerm?: string;
   sort?: string;
   limit?: number;

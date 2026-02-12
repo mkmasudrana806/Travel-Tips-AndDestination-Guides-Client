@@ -1,6 +1,6 @@
 import { TApiResponse } from "@/types/TApiResponse";
 import baseApi from "../../api/baseApi";
-import { PostQueryArgs, TPost } from "@/types/TPost";
+import { TQueryArgs, TPost } from "@/types/TPost";
 import { TCreatePost } from "@/types/TCreatePost";
 
 const postApi = baseApi.injectEndpoints({
@@ -19,7 +19,7 @@ const postApi = baseApi.injectEndpoints({
     }),
 
     // --------- load all post
-    loadAllPosts: builder.query<TApiResponse<TPost[]>, PostQueryArgs>({
+    loadAllPosts: builder.query<TApiResponse<TPost[]>, TQueryArgs>({
       query: (args) => {
         const params = new URLSearchParams();
         Object.entries(args).forEach(([key, value]) => {

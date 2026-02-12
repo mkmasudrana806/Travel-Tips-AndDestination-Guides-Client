@@ -1,9 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import baseApi from "@/redux/api/baseApi";
 import { TApiResponse } from "@/types/TApiResponse";
+import { TQueryArgs } from "@/types/TPost";
 import { TUser } from "@/types/TUser";
 
 type TUserId = string;
+type TUserStatusChanged = {
+  id: string;
+  status: string;
+};
+
+type TUserRoleChanged = {
+  id: string;
+  role: string;
+};
 
 const userApi = baseApi.injectEndpoints({
   overrideExisting: true,
@@ -43,7 +53,7 @@ const userApi = baseApi.injectEndpoints({
     }),
 
     // get all users
-    getAllUsers: builder.query({
+    getAllUsers: builder.query<TApiResponse<TUser[]>, TQueryArgs>({
       query: () => {
         return {
           url: "/users",
@@ -53,19 +63,21 @@ const userApi = baseApi.injectEndpoints({
     }),
 
     // --------- toggle user status active to blocked and vice versa
-    toggleUserStatus: builder.mutation({
-      query: ({ id, status }) => {
-        return {
-          url: `/users/toggle-user-status/${id}`,
-          method: "PATCH",
-          body: { status: status },
-        };
+    toggleUserStatus: builder.mutation<TApiResponse<TUser>, TUserStatusChanged>(
+      {
+        query: ({ id, status }) => {
+          return {
+            url: `/users/toggle-user-status/${id}`,
+            method: "PATCH",
+            body: { status: status },
+          };
+        },
+        invalidatesTags: ["users"],
       },
-      invalidatesTags: ["users"],
-    }),
+    ),
 
     // --------- toggle user role user to admin and vice versa
-    toggleUserRole: builder.mutation({
+    toggleUserRole: builder.mutation<TApiResponse<string>, TUserRoleChanged>({
       query: ({ id, role }) => {
         return {
           url: `/users/toggle-user-role/${id}`,
